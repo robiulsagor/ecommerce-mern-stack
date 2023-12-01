@@ -1,5 +1,5 @@
 import userModel from "../models/userModel.js"
-import { hashPassword } from "../helper/authHelper.js"
+import { hashPassword, comparePassword, createJWT } from "../helper/authHelper.js"
 
 const registerController = async (req, res) => {
 
@@ -57,4 +57,50 @@ const registerController = async (req, res) => {
     }
 }
 
-export { registerController }
+const loginController = async (req, res) => {
+    try {
+        const email = req.body.email
+        const pass = req.body.password
+        if (!email || !pass) {
+            return res.status(404).json({
+                success: false,
+                message: "Invalid email or password!"
+            })
+        }
+        // check user
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            return res.status(400).json({
+                succe: false,
+                message: "No user found with this credentials!"
+            })
+        }
+
+        const matchPassword = await comparePassword(pass, user.password)
+        if (!matchPassword) {
+            return res.status(200).json({
+                success: false,
+                message: "Password Error"
+            })
+        }
+
+        const token = await createJWT({ _id: user._id })
+        const { password, ...details } = user._doc
+        return res.status(200).json({
+            success: true,
+            message: "User logged in!",
+            details,
+            token
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "User login failed",
+            error
+        })
+    }
+}
+
+
+export { registerController, loginController }

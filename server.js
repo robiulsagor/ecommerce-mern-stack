@@ -15,7 +15,7 @@ const app = express()
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(express.json())
 
-// routers
+// routes
 app.use("/api/v1/auth", authRoutes)
 
 // create api
