@@ -1,15 +1,29 @@
 import express from "express"
 import colors from "colors"
+import morgan from "morgan";
+import { connectDB } from "./config/db.js";
+
+import authRoutes from "./routes/authRoute.js"
+
+// database config
+connectDB()
 
 // create app
 const app = express()
 
-const PORT = process.env.PORT | 8080;
+// middlewares
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+app.use(express.json())
+
+// routers
+app.use("/api/v1/auth", authRoutes)
 
 // create api
 app.get("/", (req, res) => {
-    res.send("<h1>Hello, this is test web page</h1>")
+    res.json({ message: "Api is working fine" })
 })
+
+const PORT = process.env.PORT | 8080;
 
 app.listen(PORT, () => {
     console.log(`Server is started on ${PORT}`.bgCyan.black);
