@@ -15,5 +15,5 @@ export const comparePassword = async (password, hashedPassword) => {
 }
 
 export const createJWT = async (data) => {
-    return await jwt.sign({ data }, process.env.JWT_SECRET, { expiresIn: '1d' })
+    return jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1d' })
 }
