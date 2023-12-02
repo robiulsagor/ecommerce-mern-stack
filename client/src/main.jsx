@@ -15,12 +15,16 @@ import {
 import Layout from './components/layout/Layout.jsx';
 import Home from './pages/Home.jsx';
 import Register from './pages/Register.jsx';
+import PageNotFound from './pages/PageNotFound.jsx';
+import About from './pages/About.jsx';
+import Contact from './pages/Contact.jsx'
+import Privacy from './pages/Privacy.jsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: "NOt found!!! ",
+    errorElement: <PageNotFound />,
     children: [
       {
         path: "/",
@@ -30,13 +34,25 @@ const router = createBrowserRouter([
         path: "/register",
         element: <Register />
       },
+      {
+        path: "/about",
+        element: <About />
+      },
+      {
+        path: "/contact",
+        element: <Contact />
+      },
+      {
+        path: "/privacy",
+        element: <Privacy />
+      },
     ]
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <RouterProvider router={router} /> */}
-    <App />
+    <RouterProvider router={router} />
+    {/* <App /> */}
   </React.StrictMode>,
 )
