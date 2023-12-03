@@ -3,10 +3,14 @@ import Layout from '../../components/layout/Layout'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast';
+import { useDispatch } from "react-redux"
+import { login } from '../../redux/authSlice';
 
 
 const Login = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const [user, setUser] = useState({
         email: "",
         password: ""
@@ -27,9 +31,10 @@ const Login = () => {
             const res = await axios.post(`${import.meta.env.VITE_API}/api/v1/auth/login`, user, {
                 signal: AbortSignal.timeout(10000) //Aborts request after 10 seconds
             })
-            console.log(res);
             if (res && res.data.success) {
-                navigate("/dashboard")
+                console.log(res.data.token);
+                // navigate("/dashboard")
+                dispatch(login({ user: res.data.details, token: res.data.token }))
                 toast.success(res.data.message, { id: "notification" })
             }
             if (res && !res.data.success) {
