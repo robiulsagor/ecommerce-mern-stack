@@ -7,30 +7,30 @@ const registerController = async (req, res) => {
         const { name, email, password, phone, address } = req.body
 
         if (!name) {
-            return res.json({ error: "Name is required!" })
+            return res.json({ message: "Name is required!" })
         }
 
         if (!email) {
-            return res.json({ error: "Email is required!" })
+            return res.json({ message: "Email is required!" })
         }
 
         if (!password) {
-            return res.json({ error: "Password is required!" })
+            return res.json({ message: "Password is required!" })
         }
 
         if (!phone) {
-            return res.json({ error: "Phone is required!" })
+            return res.json({ message: "Phone is required!" })
         }
 
         if (!address) {
-            return res.json({ error: "Address is required!" })
+            return res.json({ message: "Address is required!" })
         }
 
         // existing user check
         const existingUser = await userModel.findOne({ email })
         if (existingUser) {
             return res.status(200).json({
-                success: true,
+                success: false,
                 message: "Already registered, please login"
             })
         }
@@ -70,7 +70,7 @@ const loginController = async (req, res) => {
         // check user
         const user = await userModel.findOne({ email })
         if (!user) {
-            return res.status(400).json({
+            return res.status(200).json({
                 succe: false,
                 message: "No user found with this credentials!"
             })

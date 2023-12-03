@@ -117,11 +117,30 @@
 }
 
 /* form */
-/* .auth-bg {
-    background: linear-gradient(to bottom, #111, #444);
-} */
+.auth-bg {
+    background: linear-gradient(to bottom, rgba(248, 248, 248, 0.25), rgba(19, 159, 202, 0.21));
+}
+
 .auth-form {
-    border: 1px solid #e0dede;
     border-radius: 5px;
-    padding: 20px;
+    padding: 20px 40px;
+    background: #fff;
+    box-shadow: 0 0 2rem #cdc4c4;
+}
+
+.auth-form input, .auth-form input:focus {
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid #7b7474;
+    border-radius: 0;
+    outline: none !important;
+}
+
+.auth-form button {
+    background: black;
+    color: #fff;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 19px;
 }

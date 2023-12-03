@@ -24,10 +24,12 @@ import Contact from './pages/Contact.jsx'
 import Privacy from './pages/Privacy.jsx'
 import Login from './pages/auth/Login.jsx';
 import Dashboard from './pages/user/Dashboard.jsx';
+import { Toaster } from 'react-hot-toast';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
+    <Toaster position='top-right' />
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/dashboard' element={<Dashboard />} />

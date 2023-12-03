@@ -3,7 +3,6 @@ import Header from '../header/Header'
 import Footer from '../footer/Footer'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from "react-helmet";
-import { Toaster } from 'react-hot-toast';
 
 const Layout = ({ children, title, description, keywords }) => {
     const { pathname } = useLocation()
@@ -22,10 +21,8 @@ const Layout = ({ children, title, description, keywords }) => {
                 <meta name="author" content="Robiul Islam Sagar" />
             </Helmet>
             <main
-                className='container' style={{ padding: '5rem 0' }}>
+            >
                 {children}
-                {/* <Outlet /> */}
-                <Toaster />
             </main>
             <Footer />
         </div>
