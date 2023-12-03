@@ -2,7 +2,7 @@ import Layout from "../components/layout/Layout"
 
 const Privacy = () => {
     return (
-        <Layout>
+        <Layout title="Privacy Policy - eCommerce App">
             <div className='row row-header'>
                 <div className="col-md-7" >
                     <img src="./images/contactus.jpeg" alt="" style={{ width: '100%' }} />

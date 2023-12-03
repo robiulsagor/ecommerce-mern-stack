@@ -115,3 +115,13 @@
 .footer div a:hover {
     border-bottom: 2px solid #aaa;
 }
+
+/* form */
+/* .auth-bg {
+    background: linear-gradient(to bottom, #111, #444);
+} */
+.auth-form {
+    border: 1px solid #e0dede;
+    border-radius: 5px;
+    padding: 20px;
+}

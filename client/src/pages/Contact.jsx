@@ -5,7 +5,7 @@ import Layout from "../components/layout/Layout";
 
 const Contact = () => {
     return (
-        <Layout>
+        <Layout title="Contact - eCommerce App">
             <div className='row row-header'>
                 <div className="col-md-7" >
                     <img src="./images/contactus.jpeg" alt="" style={{ width: '100%' }} />
