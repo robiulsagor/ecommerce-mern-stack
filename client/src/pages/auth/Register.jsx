@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Layout from '../../components/layout/Layout'
 import { Link } from 'react-router-dom'
+import toast from 'react-hot-toast';
 
 const Register = () => {
     const [user, setUser] = useState({
@@ -22,6 +23,7 @@ const Register = () => {
         e.preventDefault()
         console.log(user);
         setIsLoading(true)
+        toast.success('Here is your toast.');
     }
 
     return (
