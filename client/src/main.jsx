@@ -25,46 +25,20 @@ import Privacy from './pages/Privacy.jsx'
 import Login from './pages/auth/Login.jsx';
 import Dashboard from './pages/user/Dashboard.jsx';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    errorElement: <PageNotFound />,
-    children: [
-      {
-        path: "/",
-        element: <Home />
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />
-      },
-      {
-        path: "/about",
-        element: <About />
-      },
-      {
-        path: "/contact",
-        element: <Contact />
-      },
-      {
-        path: "/privacy",
-        element: <Privacy />
-      },
-    ]
-  },
-  {
-    path: "/login",
-    element: <Login />
-  }, {
-    path: "/register",
-    element: <Register />
-  },
-]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/contact' element={<Contact />} />
+        <Route path='/privacy' element={<Privacy />} />
+        <Route path='*' element={<PageNotFound />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
 )
