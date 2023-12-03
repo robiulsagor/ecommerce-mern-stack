@@ -9,16 +9,21 @@ import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import {
+  BrowserRouter,
   createBrowserRouter,
+  Route,
   RouterProvider,
+  Routes,
 } from "react-router-dom";
 import Layout from './components/layout/Layout.jsx';
 import Home from './pages/Home.jsx';
-import Register from './pages/Register.jsx';
+import Register from './pages/auth/Register.jsx';
 import PageNotFound from './pages/PageNotFound.jsx';
 import About from './pages/About.jsx';
 import Contact from './pages/Contact.jsx'
 import Privacy from './pages/Privacy.jsx'
+import Login from './pages/auth/Login.jsx';
+import Dashboard from './pages/user/Dashboard.jsx';
 
 const router = createBrowserRouter([
   {
@@ -31,8 +36,8 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/register",
-        element: <Register />
+        path: "/dashboard",
+        element: <Dashboard />
       },
       {
         path: "/about",
@@ -48,11 +53,18 @@ const router = createBrowserRouter([
       },
     ]
   },
+  {
+    path: "/login",
+    element: <Login />
+  }, {
+    path: "/register",
+    element: <Register />
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-    {/* <App /> */}
+
   </React.StrictMode>,
 )
