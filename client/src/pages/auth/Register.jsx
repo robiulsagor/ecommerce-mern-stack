@@ -1,8 +1,9 @@
 import React from 'react'
+import Layout from '../../components/layout/Layout'
 
 const Register = () => {
     return (
-        <div>Register</div>
+        <Layout>Register..</Layout>
     )
 }
 

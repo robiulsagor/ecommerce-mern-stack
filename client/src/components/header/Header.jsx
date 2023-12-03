@@ -4,8 +4,8 @@ import { SiShopee } from "react-icons/si";
 const Header = () => {
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary">
-                <div className="container-fluid">
+            <nav className="navbar navbar-expand-lg bg-body-tertiary ">
+                <div className="container-fluid custom-container">
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon" />
                     </button>
@@ -26,7 +26,7 @@ const Header = () => {
                                 <NavLink to='/login' className="nav-link">Login</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/cart' className="nav-link ">Cart (0)</NavLink>
+                                <NavLink to='/cart' className="nav-link cart-link ">Cart <span>20</span></NavLink>
                             </li>
 
                         </ul>

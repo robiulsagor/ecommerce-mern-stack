@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <Layout>
-        Hello there..
+        {/* Hello there.. */}
       </Layout>
     </>
   )

@@ -4,6 +4,11 @@
 /* font-family: 'Poppins', sans-serif; */
 /* font-family: 'Roboto', sans-serif; */
 /* navbar */
+.custom-container {
+    padding-left: 20px !important;
+    padding-right: 40px !important;
+}
+
 .navbar {
     font-family: 'Poppins', sans-serif;
     font-size: 19px;
@@ -31,6 +36,66 @@
     border-bottom: 2px solid #000;
 }
 
+.cart-link {
+    position: relative;
+}
+
+.cart-link span {
+    position: absolute;
+    top: -5px;
+    background: #9d1616;
+    /* padding: 0 5px; */
+    text-align: center;
+    color: #fff;
+    border-radius: 20px;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    line-height: 25px;
+}
+
+/* ============ */
+/* Page not found */
+.pnf-container {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    color: #444;
+}
+
+.pnf-title {
+    font-weight: 700;
+    font-size: 100px;
+}
+
+.pnf a {
+    border: 1px solid #222;
+    padding: 12px 20px;
+    margin-top: 18px;
+    display: inline-block;
+    text-decoration: none;
+    color: #000;
+    transition: .2s;
+    border-radius: 5px;
+}
+
+.pnf a:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* =========== */
+/* contact */
+.row-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ================== */
 /* footer */
 .footer {
     background: linear-gradient(to right, #345, #111, #314);
