@@ -1,13 +1,16 @@
 import { Link, NavLink } from "react-router-dom"
 import { SiShopee } from "react-icons/si";
-import { useAuth } from "../../context/authContext";
 import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux"
+import { logout } from "../../redux/authSlice";
 
 const Header = () => {
-    const [auth, setAuth] = useAuth()
+
+    const dispatch = useDispatch()
+    const auth = useSelector(state => state.auth)
+
     const logoutFunction = () => {
-        setAuth({ user: null, token: "" })
-        localStorage.removeItem("auth")
+        dispatch(logout())
         toast.success("Logout successfully!")
     }
     return (
@@ -38,6 +41,7 @@ const Header = () => {
                                         <NavLink to='/login' className="nav-link">Login</NavLink>
                                     </li>
                             }
+
                             <li className="nav-item">
                                 <NavLink to='/cart' className="nav-link cart-link ">Cart <span>20</span></NavLink>
                             </li>

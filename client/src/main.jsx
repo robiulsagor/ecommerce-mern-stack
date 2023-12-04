@@ -27,12 +27,12 @@ import Dashboard from './pages/user/Dashboard.jsx';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from "react-redux"
 import { store } from './redux/store.js';
-import { AuthProvider } from './context/authContext.jsx';
+// import { AuthProvider } from './context/authContext.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <Provider store={store}>
-  <AuthProvider>
+  <Provider store={store}>
+    {/* <AuthProvider> */}
     <BrowserRouter>
       <Toaster position='top-right' />
       <Routes>
@@ -46,6 +46,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
-  </AuthProvider>
-  // </Provider>
+    {/* </AuthProvider> */}
+  </Provider>
 )

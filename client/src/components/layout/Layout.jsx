@@ -3,13 +3,27 @@ import Header from '../header/Header'
 import Footer from '../footer/Footer'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from "react-helmet";
+import { useDispatch } from "react-redux"
+import { login } from '../../redux/authSlice';
 
 const Layout = ({ children, title, description, keywords }) => {
     const { pathname } = useLocation()
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const data = localStorage.getItem("auth")
+        if (data) {
+            const parsedData = JSON.parse(data)
+            console.log(parsedData);
+            dispatch(login({ user: parsedData.details, token: parsedData.token }))
+        }
+    }, [])
 
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [pathname])
+
+
+
     return (
         <div>
             <Header />
