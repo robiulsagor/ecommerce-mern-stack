@@ -5,11 +5,14 @@ import axios from 'axios'
 import toast from 'react-hot-toast';
 import { useDispatch } from "react-redux"
 import { login } from '../../redux/authSlice';
+import { useAuth } from '../../context/authContext';
 
 
 const Login = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
+
+    const [auth, setAuth] = useAuth()
 
     const [user, setUser] = useState({
         email: "",
@@ -34,7 +37,10 @@ const Login = () => {
             if (res && res.data.success) {
                 console.log(res.data.token);
                 // navigate("/dashboard")
-                dispatch(login({ user: res.data.details, token: res.data.token }))
+                // dispatch(login({ user: res.data.details, token: res.data.token }))
+                setAuth({ user: res.data.details, token: res.data.token })
+                localStorage.setItem("auth", JSON.stringify(res.data))
+                navigate("/")
                 toast.success(res.data.message, { id: "notification" })
             }
             if (res && !res.data.success) {

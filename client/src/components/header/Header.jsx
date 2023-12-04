@@ -1,7 +1,15 @@
 import { Link, NavLink } from "react-router-dom"
 import { SiShopee } from "react-icons/si";
+import { useAuth } from "../../context/authContext";
+import toast from "react-hot-toast";
 
 const Header = () => {
+    const [auth, setAuth] = useAuth()
+    const logoutFunction = () => {
+        setAuth({ user: null, token: "" })
+        localStorage.removeItem("auth")
+        toast.success("Logout successfully!")
+    }
     return (
         <>
             <nav className="navbar navbar-expand-lg bg-body-tertiary ">
@@ -22,9 +30,14 @@ const Header = () => {
                             <li className="nav-item">
                                 <NavLink to='/category' className="nav-link">Category</NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink to='/login' className="nav-link">Login</NavLink>
-                            </li>
+                            {
+                                auth.user ? <li className="nav-item">
+                                    <NavLink onClick={logoutFunction} to='/login' className="nav-link">Logout</NavLink>
+                                </li> :
+                                    <li className="nav-item">
+                                        <NavLink to='/login' className="nav-link">Login</NavLink>
+                                    </li>
+                            }
                             <li className="nav-item">
                                 <NavLink to='/cart' className="nav-link cart-link ">Cart <span>20</span></NavLink>
                             </li>
