@@ -3,26 +3,36 @@ import Header from '../header/Header'
 import Footer from '../footer/Footer'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from "react-helmet";
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { login } from '../../redux/authSlice';
+import axios from 'axios';
 
 const Layout = ({ children, title, description, keywords }) => {
     const { pathname } = useLocation()
     const dispatch = useDispatch()
-    useEffect(() => {
-        const data = localStorage.getItem("auth")
-        if (data) {
-            const parsedData = JSON.parse(data)
-            console.log(parsedData);
-            dispatch(login({ user: parsedData.details, token: parsedData.token }))
-        }
-    }, [])
+    const auth = useSelector(state => state.auth)
 
+    console.log(auth);
+
+    // useEffect(() => {
+    //     console.log("test");
+    //     const data = localStorage.getItem("auth")
+    //     if (data) {
+    //         console.log(data);
+    //         const parsedData = JSON.parse(data)
+    //         if (!auth.user) {
+    //             console.log("no auth");
+    //             dispatch(login({ user: parsedData.details, token: parsedData.token }))
+    //         }
+    //     }
+    // }, [])
+
+    // auto scroll to top
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [pathname])
-
-
+    console.log(auth);
+    axios.defaults.headers.common['Authorization'] = auth?.token
 
     return (
         <div>

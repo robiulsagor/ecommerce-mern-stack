@@ -26,26 +26,29 @@ import Login from './pages/auth/Login.jsx';
 import Dashboard from './pages/user/Dashboard.jsx';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from "react-redux"
-import { store } from './redux/store.js';
-// import { AuthProvider } from './context/authContext.jsx';
+import { store, persistor } from './redux/store.js';
+import { PersistGate } from 'redux-persist/integration/react';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    {/* <AuthProvider> */}
-    <BrowserRouter>
-      <Toaster position='top-right' />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/privacy' element={<Privacy />} />
-        <Route path='*' element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
-    {/* </AuthProvider> */}
+    <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter>
+        <Toaster position='top-right' />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/dashboard' element={<ProtectedRoute />} >
+            <Route path='' element={<Dashboard />} />
+          </Route>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/privacy' element={<Privacy />} />
+          <Route path='*' element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </PersistGate >
   </Provider>
 )

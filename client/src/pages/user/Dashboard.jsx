@@ -4,7 +4,6 @@ import { useSelector } from "react-redux"
 
 const Dashboard = () => {
     const auth = useSelector(state => state.auth)
-    console.log(auth);
 
     return (
         <Layout title="Dashboard - eCommerce App">

@@ -11,8 +11,8 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [user, setUser] = useState({
-        email: "",
-        password: ""
+        email: "sagor@gmail.com",
+        password: "123456"
     })
     const [isLoading, setIsLoading] = useState(false)
 
@@ -22,7 +22,7 @@ const Login = () => {
         })
     }
 
-    const registerUser = async e => {
+    const loginUser = async e => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -31,10 +31,9 @@ const Login = () => {
                 signal: AbortSignal.timeout(10000) //Aborts request after 10 seconds
             })
             if (res && res.data.success) {
-                console.log(res.data.token);
+                console.log("hello");
                 navigate("/dashboard")
                 dispatch(login({ user: res.data.details, token: res.data.token }))
-                localStorage.setItem("auth", JSON.stringify(res.data))
                 toast.success(res.data.message, { id: "notification" })
             }
             if (res && !res.data.success) {
@@ -60,7 +59,7 @@ const Login = () => {
                         <div className="col-lg-5 col-md-8 col-11 col-sm-10 mx-auto ">
                             <div className="auth-form">
                                 <h1 className='text-center mb-5'>Login</h1>
-                                <form onSubmit={registerUser}>
+                                <form onSubmit={loginUser}>
                                     <div>
                                         <input type="email" name='email' value={user.email} onChange={e => setUserValues(e)} className="form-control mb-4" placeholder="Your email" disabled={isLoading} />
                                         <input type="password" name='password' value={user.password} onChange={e => setUserValues(e)} className="form-control mb-4" placeholder="Type a password" disabled={isLoading} />

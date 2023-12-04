@@ -144,3 +144,11 @@
     padding: 10px;
     font-size: 19px;
 }
+
+.height-full {
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
