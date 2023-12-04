@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useSelector } from "react-redux"
 import axios from "axios"
 import Spinner from './Spinner'
+import toast from 'react-hot-toast'
 
 const ProtectedRoute = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     const auth = useSelector(state => state.auth)
     const [ok, setOk] = useState(false)
     const [wait, setWait] = useState(10)
@@ -25,12 +27,23 @@ const ProtectedRoute = () => {
                     setOk(true)
                 } else {
                     setOk(false)
+                    navigate("/login", {
+                        state: location.pathname
+                    })
+
+                    console.log("not logged");
                 }
             } catch (error) {
                 setOk(false)
             }
         }
         auth?.token && authCheck()
+        if (!auth.token) {
+            navigate("/login", {
+                state: location.pathname
+            })
+            toast.error("Please login first!")
+        }
     }, [])
 
     // if not, redirect to the login page
@@ -40,7 +53,7 @@ const ProtectedRoute = () => {
             setWait(prev => prev - 1)
         }, 1000)
 
-        wait == 0 && !ok && navigate("/login")
+        wait == 0 && !ok && navigate("/login", { state: location.pathname })
         return () => clearInterval(timer)
     }, [wait, navigate])
 

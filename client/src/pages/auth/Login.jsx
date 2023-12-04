@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Layout from '../../components/layout/Layout'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast';
 import { useDispatch } from "react-redux"
@@ -10,6 +10,7 @@ import { login } from '../../redux/authSlice';
 const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const location = useLocation()
     const [user, setUser] = useState({
         email: "sagor@gmail.com",
         password: "123456"
@@ -32,7 +33,7 @@ const Login = () => {
             })
             if (res && res.data.success) {
                 console.log("hello");
-                navigate("/dashboard")
+                navigate(location.state || "/")
                 dispatch(login({ user: res.data.details, token: res.data.token }))
                 toast.success(res.data.message, { id: "notification" })
             }

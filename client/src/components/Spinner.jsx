@@ -7,7 +7,8 @@ const Spinner = () => {
 
 
     return (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+        <div className="d-flex flex-column  justify-content-center align-items-center" style={{ height: '80vh' }}>
+            <h2>Loading...</h2>
             <div className="spinner-border " role="status">
                 <span className="visually-hidden">Loading...</span>
             </div>
