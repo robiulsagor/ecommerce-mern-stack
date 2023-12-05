@@ -12,26 +12,10 @@ const Layout = ({ children, title, description, keywords }) => {
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
 
-    console.log(auth);
-
-    // useEffect(() => {
-    //     console.log("test");
-    //     const data = localStorage.getItem("auth")
-    //     if (data) {
-    //         console.log(data);
-    //         const parsedData = JSON.parse(data)
-    //         if (!auth.user) {
-    //             console.log("no auth");
-    //             dispatch(login({ user: parsedData.details, token: parsedData.token }))
-    //         }
-    //     }
-    // }, [])
-
     // auto scroll to top
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [pathname])
-    console.log(auth);
     axios.defaults.headers.common['Authorization'] = auth?.token
 
     return (

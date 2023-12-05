@@ -5,24 +5,29 @@ export const requireSignIn = async (req, res, next) => {
     try {
         const token = await req.headers.authorization
         if (!token) {
-            return res.status(400).json({
+            return res.status(200).json({
                 success: false,
                 message: "No token found!"
             })
         }
 
-        const verify = await jwt.verify(token, process.env.JWT_SECRET)
-        req.user = verify
-        if (!verify) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid token!"
-            })
-        }
-        next()
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                console.log("Not valid");
+                return res.status(200).json({
+                    success: false,
+                    message: "Token invalid or Expired! Please Login Again"
+                })
+            }
+
+            console.log(decoded);
+            req.user = decoded
+            next()
+        })
+
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
+        return res.status(200).json({
             success: false,
             message: "Failed",
             error: error.message
@@ -31,7 +36,6 @@ export const requireSignIn = async (req, res, next) => {
 }
 
 export const isAdmin = async (req, res, next) => {
-    console.log(req.user);
     try {
         const checkAdmin = await userModel.findById({ _id: req.user._id })
         if (checkAdmin.role !== 1) {

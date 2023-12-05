@@ -11,7 +11,8 @@ const Register = () => {
         email: "",
         password: "",
         phone: "",
-        address: ""
+        address: "",
+        secret: "",
     })
     const [isLoading, setIsLoading] = useState(false)
 
@@ -29,10 +30,15 @@ const Register = () => {
             const res = await axios.post(`${import.meta.env.VITE_API}/api/v1/auth/register`, user, {
                 signal: AbortSignal.timeout(10000) //Aborts request after 10 seconds
             })
-            console.log(res);
-            navigate("/login")
+
             if (res && res.data.success) {
+                // successfully registered
+                navigate("/login")
                 toast.success(res.data.message, { id: "notification" })
+            } else {
+                // something went wrong
+                setIsLoading(false)
+                toast.error(res.data.message)
             }
         } catch (error) {
             console.log(error);
@@ -52,7 +58,7 @@ const Register = () => {
                     <div className=" row">
                         <div className="col-lg-5 col-md-8 col-11 col-sm-10 mx-auto ">
                             <div className="auth-form">
-                                <h1 className='text-center mb-5'>Register</h1>
+                                <h1 className='text-center mb-5 auth-headerText'>Register</h1>
                                 <form onSubmit={registerUser}>
                                     <div>
                                         <input type="text" name='name' value={user.name} onChange={e => setUserValues(e)} className="form-control mb-4" placeholder="Your name" disabled={isLoading} required />
@@ -60,6 +66,7 @@ const Register = () => {
                                         <input type="password" name='password' value={user.password} onChange={e => setUserValues(e)} className="form-control mb-4" placeholder="Type a password" disabled={isLoading} required />
                                         <input type="text" name='phone' value={user.phone} onChange={e => setUserValues(e)} className="form-control mb-4" placeholder="Your Phone Number" disabled={isLoading} required />
                                         <input type="text" name='address' value={user.address} onChange={e => setUserValues(e)} className="form-control mb-4" placeholder="Your address" disabled={isLoading} required />
+                                        <input type="text" name='secret' value={user.secret} onChange={e => setUserValues(e)} className="form-control mb-4" placeholder="Who is your favourite teacher?" disabled={isLoading} title='Security Question' />
 
                                         {isLoading ? <div className="d-flex justify-content-center m-3 text-primary">
                                             <div className="spinner-border" role="status">

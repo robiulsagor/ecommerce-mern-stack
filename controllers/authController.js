@@ -4,26 +4,42 @@ import { hashPassword, comparePassword, createJWT } from "../helper/authHelper.j
 const registerController = async (req, res) => {
 
     try {
-        const { name, email, password, phone, address } = req.body
+        const { name, email, password, phone, address, secret } = req.body
 
         if (!name) {
-            return res.json({ message: "Name is required!" })
+            return res.json({
+                message: "Name is required!",
+                success: false
+            })
         }
 
         if (!email) {
-            return res.json({ message: "Email is required!" })
+            return res.json({
+                message: "Email is required!",
+                success: false
+            })
         }
 
         if (!password) {
-            return res.json({ message: "Password is required!" })
+            return res.json({
+                message: "Password is required!",
+                success: false
+            })
         }
 
         if (!phone) {
-            return res.json({ message: "Phone is required!" })
+            return res.json({
+                message: "Phone is required!",
+                success: false
+            })
         }
 
         if (!address) {
             return res.json({ message: "Address is required!" })
+        }
+
+        if (!secret) {
+            return res.json({ message: "Secret is required!" })
         }
 
         // existing user check
@@ -39,7 +55,7 @@ const registerController = async (req, res) => {
         const hashedPassword = await hashPassword(password)
 
         // save user to db
-        const newUser = await new userModel({ name, email, password: hashedPassword, phone, address }).save()
+        const newUser = await new userModel({ name, email, password: hashedPassword, phone, address, secret }).save()
 
         res.status(201).json({
             success: true,
@@ -100,6 +116,36 @@ const loginController = async (req, res) => {
             error
         })
     }
+}
+
+export const passwordReset = async (req, res) => {
+    const { email, secret, newPassword } = req.body
+    if (!email) {
+        return res.json({ success: false, message: "Email error" })
+    }
+    if (!secret) {
+        return res.json({ success: false, message: "Please answer secret question." })
+    }
+    if (!newPassword) {
+        return res.json({ success: false, message: "Please type a new password" })
+    }
+
+    // find the user using email
+    const user = await userModel.findOne({ email })
+
+    if (!user) {
+        return res.json({ success: false, message: "No user found with this email" })
+    }
+
+    if (secret.trim() !== user.secret) {
+        return res.json({ success: false, message: "Secret answer does not match!" })
+    }
+
+    const hashedPassword = await hashPassword(newPassword)
+    await userModel.findByIdAndUpdate(user._id, { password: hashedPassword })
+
+    res.json({ success: true, message: "Password changed successfully!" })
+
 }
 
 

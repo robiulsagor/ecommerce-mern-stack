@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import Spinner from './Spinner'
 import toast from 'react-hot-toast'
+import { logout } from "../redux/authSlice"
 
 const ProtectedRoute = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
     const [ok, setOk] = useState(false)
     const [wait, setWait] = useState(10)
@@ -30,14 +32,18 @@ const ProtectedRoute = () => {
                     navigate("/login", {
                         state: location.pathname
                     })
-
+                    console.log(res);
                     console.log("not logged");
+                    toast.error(res.data.message)
+                    dispatch(logout())
                 }
             } catch (error) {
                 setOk(false)
             }
         }
+
         auth?.token && authCheck()
+
         if (!auth.token) {
             navigate("/login", {
                 state: location.pathname

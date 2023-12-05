@@ -24,6 +24,10 @@ const userModel = new mongoose.Schema(
             type: String,
             required: true,
         },
+        secret: {
+            type: String,
+            required: true,
+        },
         role: {
             type: Number,
             default: 0

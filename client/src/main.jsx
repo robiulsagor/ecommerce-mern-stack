@@ -29,6 +29,7 @@ import { Provider } from "react-redux"
 import { store, persistor } from './redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ForgotPassword from './pages/auth/ForgotPassword.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/privacy' element={<Privacy />} />
