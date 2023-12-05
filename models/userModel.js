@@ -24,6 +24,10 @@ const userModel = new mongoose.Schema(
             type: String,
             required: true,
         },
+        question: {
+            type: String,
+            require: true,
+        },
         secret: {
             type: String,
             required: true,

@@ -22,6 +22,7 @@ app.use(cors())
 app.get("/api/v1/test", (req, res) => {
     res.json("THis is a test route")
 })
+
 // auth routes
 app.use("/api/v1/auth", authRoutes)
 

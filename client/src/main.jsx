@@ -55,7 +55,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
           {/* for admins only */}
           <Route path='/admin' element={<AdminProtected />} >
-            {/* <Route path='' element={<Dashboard />} /> */}
             <Route path='secret' element={<SecretQuestions />} />
           </Route>
 

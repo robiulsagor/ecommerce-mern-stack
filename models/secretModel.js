@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const secretQuestionModel = new mongoose.Schema(
+const secretModel = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -9,4 +9,4 @@ const secretQuestionModel = new mongoose.Schema(
     }
 )
 
-export default mongoose.model("secretQuestion", secretQuestionModel)
+export default mongoose.model("secretQuestion", secretModel)

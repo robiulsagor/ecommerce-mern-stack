@@ -20,7 +20,6 @@ export const requireSignIn = async (req, res, next) => {
                 })
             }
 
-            console.log(decoded);
             req.user = decoded
             next()
         })

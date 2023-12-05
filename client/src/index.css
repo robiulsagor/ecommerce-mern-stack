@@ -143,12 +143,13 @@ h1, h2, h3, h4 {
     box-shadow: 0 0 2rem #cdc4c4;
 }
 
-.auth-form input, .auth-form input:focus {
+.auth-form input, .auth-form input:focus, .auth-form select {
     border: none;
     background: transparent;
     border-bottom: 2px solid #7b7474;
     border-radius: 0;
     outline: none !important;
+    width: 100%;
 }
 
 .auth-form button {

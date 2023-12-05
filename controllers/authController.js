@@ -4,7 +4,9 @@ import { hashPassword, comparePassword, createJWT } from "../helper/authHelper.j
 const registerController = async (req, res) => {
 
     try {
-        const { name, email, password, phone, address, secret } = req.body
+        const { name, email, password, phone, address, question, secret } = req.body
+
+        console.log(question);
 
         if (!name) {
             return res.json({
@@ -38,6 +40,10 @@ const registerController = async (req, res) => {
             return res.json({ message: "Address is required!" })
         }
 
+        if (!question) {
+            return res.json({ message: "Question is required!" })
+        }
+
         if (!secret) {
             return res.json({ message: "Secret is required!" })
         }
@@ -55,7 +61,7 @@ const registerController = async (req, res) => {
         const hashedPassword = await hashPassword(password)
 
         // save user to db
-        const newUser = await new userModel({ name, email, password: hashedPassword, phone, address, secret }).save()
+        const newUser = await new userModel({ name, email, password: hashedPassword, phone, address, question, secret }).save()
 
         res.status(201).json({
             success: true,
@@ -75,6 +81,7 @@ const registerController = async (req, res) => {
 
 const loginController = async (req, res) => {
     try {
+        console.log(req.body);
         const email = req.body.email
         const pass = req.body.password
         if (!email || !pass) {

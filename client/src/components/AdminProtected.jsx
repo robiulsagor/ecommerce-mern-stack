@@ -4,12 +4,9 @@ import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import Spinner from './Spinner'
 import toast from 'react-hot-toast'
-import { logout } from "../redux/authSlice"
 
 const AdminProtected = () => {
     const navigate = useNavigate()
-    const location = useLocation()
-    const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
     const [ok, setOk] = useState(false)
     const [wait, setWait] = useState(10)
@@ -17,28 +14,30 @@ const AdminProtected = () => {
     // to check if the token is valid
     // if valid, permit to go to desired page
     // if not, redirect to the login page
+
     useEffect(() => {
         const authCheck = async () => {
             try {
-                const res = await axios.get('api/v1/auth/admin-auth', {
+                const res = await axios.get('/api/auth/admin-auth', {
                     headers: {
                         'Authorization': auth?.token
                     }
                 })
-                console.log(res);
 
                 if (res.data.ok) {
                     setOk(true)
                 } else {
                     setOk(false)
-                    navigate("/")
-                    toast.error(res.data.message)
+                    // navigate("/")
+                    console.log("not ok");
+                    toast.error(res.data.message || "Network Error")
                 }
             } catch (error) {
                 setOk(false)
                 console.log(error);
                 navigate("/")
                 toast.error(error.response.data.message)
+                console.log("loggging22");
             }
         }
 
@@ -60,6 +59,10 @@ const AdminProtected = () => {
         wait == 0 && !ok && navigate("/login")
         return () => clearInterval(timer)
     }, [wait, navigate])
+
+    // ===================================
+
+
 
     return ok ? <Outlet /> : <Spinner />
 }

@@ -1,10 +1,16 @@
 import React from 'react'
 import Layout from '../components/layout/Layout'
 import axios from 'axios'
+import { useSelector } from "react-redux"
 
 const Home = () => {
+    const auth = useSelector(state => state.auth)
     const t = async () => {
-        const res = await axios.get("api/test")
+        const res = await axios.get("api/auth/admin-auth", {
+            headers: {
+                'Authorization': auth?.token
+            }
+        })
         console.log(res.data);
     }
 

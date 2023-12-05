@@ -1,94 +1,230 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../../components/layout/Layout'
 import { FaPencil } from "react-icons/fa6";
 import { FaRegTrashAlt } from "react-icons/fa";
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const SecretQuestions = () => {
-    const [ques, setQues] = useState("")
+    const [secret, setSecret] = useState("")
+
+    // loaded secrets for deleting
+    const [loadedSecret, setLoadedSecret] = useState()
+    const [allSecrets, setAllSecrets] = useState([])
+    const [error, setError] = useState("")
+    const [fetching, setFetching] = useState(false)
     const [loading, setLoading] = useState(false)
+
+    // store how many users using this question
+    const [usedUser, setUsedUser] = useState()
+
+    // refetch is to fetch data again if someting is changed, i.e added or deleted
+    const [refetch, setRefetch] = useState(false)
+
+    // mode to determine if you are in edit mode or add mode
+    const [mode, setMode] = useState("add") //add, or edit 
+
+    // ref for the input
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        const loadSecrets = async () => {
+            setFetching(true)
+            try {
+                const res = await axios.get("/api/admin/view-secrets")
+                if (res && res.data.secrets.length > 0) {
+                    setAllSecrets(res.data.secrets)
+                } else if (res && res.data.secrets == 0) {
+                    setError("No secret questions found!")
+                }
+                setFetching(false)
+                setRefetch(false)
+            } catch (error) {
+                console.log(error);
+                setError("Loading Error!")
+                setFetching(false)
+            }
+        }
+
+        loadSecrets()
+    }, [refetch])
+
 
     const handleSubmit = async e => {
         e.preventDefault()
         setLoading(true)
 
-        console.log(ques);
-
         try {
-            const res = await axios.post("add-secert", ques)
-            console.log(res);
+            const res = await axios.post("http://localhost:8080/api/v1/admin/add-secret", { secret }, {
+                signal: AbortSignal.timeout(70000) //Aborts request after 10 seconds
+            })
+            if (res && res.data.success) {
+                toast.success(res.data.message || "Success")
+                setSecret("")
+                setRefetch(true)
+            } else if (res && res.data.success === false) {
+                toast.error(res.data.message || "Something went wrong!")
+            }
+            setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
+            toast.error(error?.response || "Something went wrong!")
         }
 
     }
-    const editQues = () => {
+
+    const prepareToEdit = data => {
+        setMode("edit")
+        setSecret(data.name)
+        setLoadedSecret(data)
+        inputRef.current.focus()
+    }
+
+    const cancelEdit = () => {
+        setMode("add")
+        setSecret("")
+    }
+
+    const editSecret = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        try {
+            const res = await axios.put("/api/admin/edit-secret", { id: loadedSecret._id, secret })
+            if (res?.data.success) {
+                toast.success("Edited!")
+                cancelEdit()
+                setRefetch(true)
+                setLoading(false)
+            } else {
+                toast.error("couldn't edit")
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("couldn't edit")
+        }
+    }
+
+    const deleteSecret = async () => {
+        // to do
+        try {
+            const res = await axios.delete(`/api/admin/delete-secret?id=${loadedSecret._id}`)
+            toast.success("deleted")
+            setRefetch(true)
+        } catch (error) {
+            console.log(error);
+            toast.error("couldn't delete")
+        }
+
 
     }
-    const deleteQues = () => {
 
+    const previewSecret = async id => {
+
+        // find the users count who used this as sequrity question
+        const findUser = await axios.get(`/api/admin/view-user-with-this-question?id=${id}`)
+        setUsedUser(findUser.data)
+
+        // actual question
+        const question = await axios.get(`/api/admin/view-single-secret?id=${id}`)
+
+        if (question?.data?.success) {
+            setLoadedSecret(question?.data?.secret)
+        }
     }
-
-
 
     return (
         <Layout>
             <div className="container">
                 <div className="row py-5 ">
-                    <div className="col-md-6 mx-auto ">
+                    <div className="col-lg-6 col-md-9 col-sm-10 mx-auto ">
                         <div className='common-container-1'>
 
                             <h2 className='text-center  mb-3'>Secret Questions →</h2>
-                            <h3 className=''>Add Question:</h3>
+                            <h3> {mode == "add" ? "Add" : "Edit"} Question :</h3>
 
-
-                            <form onSubmit={handleSubmit} className='mb-5'>
-                                <input type="text" value={ques} onChange={e => setQues(e.target.value)} placeholder='Type Question'
-                                    className="form-control mb-3" required disabled={loading} />
+                            <form onSubmit={mode == "add" ? handleSubmit : editSecret} className='mb-5'>
+                                <input type="text" value={secret} onChange={e => setSecret(e.target.value)} placeholder='Type Question' ref={inputRef}
+                                    className="form-control mb-3" disabled={loading} />
 
                                 {loading ? <>
                                     <div className="d-flex flex-column  justify-content-center " >
-                                        {/* <h2>Loading...</h2> */}
                                         <div className="spinner-border " role="status">
                                             <span className="visually-hidden">Loading...</span>
                                         </div>
                                     </div>
-                                </> : <button type='submit' className="btn btn-primary">Add To DB</button>}
+                                </> : <div className="d-flex" style={{ gap: "10px" }}>
+                                    <button type='submit' className={`btn ${mode == "add" ? "btn-primary" : "btn-outline-primary"}`} style={{ display: "inline-block" }}>
+                                        {mode == "add" ? "Add To DB" : "Edit Data"}
+                                    </button>
+
+                                    {mode == "edit" && <button type='submit' className={`pl-2 btn btn-outline-danger`}
+                                        onClick={cancelEdit} style={{ display: "inline-block" }}>Cancel</button>}
+                                </div>}
+
                             </form>
 
                             <hr />
 
                             <h3>Questions: </h3>
 
-                            <table className="table table-bordered">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Who is your favourite teacher?</td>
-                                        <td className='text-center'>
-                                            <span onClick={editQues}
-                                                className='action_btn action_edit'> <FaPencil /></span>
+                            {fetching ? <><div className="d-flex justify-content-center">
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            </> : <>
+                                <table className="table table-bordered">
+                                    <tbody>
+                                        {allSecrets.map((sec, i) => {
+                                            return <tr key={sec._id}>
+                                                <th scope="row">{i + 1} </th>
+                                                <td>{sec.name} ?</td>
+                                                <td className='text-center'>
+                                                    <span onClick={() => prepareToEdit(sec)}
+                                                        className='action_btn action_edit'> <FaPencil /></span>
 
-                                        </td>
-                                        <td className='text-center'>
-                                            <span className='action_btn action_delete' onClick={deleteQues}>  <FaRegTrashAlt /></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th >2</th>
-                                        <td>Jacob</td>
-                                        <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>@twitter</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                                </td>
+                                                <td className='text-center'>
+                                                    <span className='action_btn action_delete' onClick={() => previewSecret(sec._id)}
+                                                        data-bs-toggle="modal" data-bs-target="#deleteModal">  <FaRegTrashAlt /></span>
+                                                </td>
+                                            </tr>
+                                        })}
+                                    </tbody>
+                                </table>
+                            </>}
+
+
                         </div>
                     </div>
                 </div>
             </div>
+
+
+            {/* Modal */}
+            <div className="modal fade" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">
+                                Confirm Deletion
+                            </h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div className="modal-body">
+                            Are you sure to delete this security question: <br /> <b> {loadedSecret?.name} ?</b>
+                            <br />
+                            <i>  → {usedUser > 0 ? `Used by ${usedUser} user` : 'None used it.'}</i>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" className="btn btn-primary" onClick={deleteSecret} data-bs-dismiss="modal">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </Layout>
     )
 }

@@ -57,11 +57,17 @@ const Login = () => {
     const auth = useSelector(state => state.auth)
     useEffect(() => {
         const authCheck = async () => {
-            const res = await axios.get(`${import.meta.env.VITE_API}/api/v1/auth/user-auth`, {
+            const res = await axios.get('api/auth/user-auth', {
                 headers: {
                     'Authorization': auth?.token
                 }
             })
+            // const res = await axios.get(`${import.meta.env.VITE_API}/api/v1/auth/user-auth`, {
+            //     headers: {
+            //         'Authorization': auth?.token
+            //     }
+            // })
+            console.log(res);
             if (res.data.success) {
                 toast.success("You are alredy signed in!")
                 navigate("/")
