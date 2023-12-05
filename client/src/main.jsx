@@ -30,6 +30,8 @@ import { store, persistor } from './redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ForgotPassword from './pages/auth/ForgotPassword.jsx';
+import SecretQuestions from './pages/admin/secretQuestions.jsx';
+import AdminProtected from './components/AdminProtected.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -39,15 +41,25 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Toaster position='top-right' />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/dashboard' element={<ProtectedRoute />} >
-            <Route path='' element={<Dashboard />} />
-          </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/privacy' element={<Privacy />} />
+
+          {/* for logged users only */}
+          <Route path='/dashboard' element={<ProtectedRoute />} >
+            <Route path='' element={<Dashboard />} />
+          </Route>
+
+          {/* for admins only */}
+          <Route path='/admin' element={<AdminProtected />} >
+            {/* <Route path='' element={<Dashboard />} /> */}
+            <Route path='secret' element={<SecretQuestions />} />
+          </Route>
+
+          {/* for no match */}
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>

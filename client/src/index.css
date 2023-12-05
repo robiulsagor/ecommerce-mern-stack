@@ -4,9 +4,19 @@
 /* font-family: 'Poppins', sans-serif; */
 /* font-family: 'Roboto', sans-serif; */
 /* navbar */
+h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+}
+
 .custom-container {
     padding-left: 20px !important;
     padding-right: 40px !important;
+}
+
+.common-container-1 {
+    /* box-shadow: 0 0 10px #f6f6f6; */
+    border-radius: 10px;
+    padding: 25px 35px;
 }
 
 .navbar {
@@ -148,4 +158,35 @@
     width: 100%;
     padding: 10px;
     font-size: 19px;
+}
+
+/* admin question edit delete button */
+.action_btn {
+    background: #0000004c;
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin: auto;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.action_btn:hover {
+    transform: scale(1.1);
+}
+
+.action_edit {
+    background: rgb(5, 117, 5);
+}
+
+.action_delete {
+    background: rgb(117, 5, 33);
+}
+
+.common-container-1 {
+    box-shadow: 0 0 10px 8px #cbc8c8;
+    border-radius: 10px;
+    padding: 25px 35px;
 }

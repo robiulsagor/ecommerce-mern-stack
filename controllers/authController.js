@@ -102,9 +102,11 @@ const loginController = async (req, res) => {
 
         const token = await createJWT({ _id: user._id })
         const { password, ...details } = user._doc
+        let message;
+        user.role === 1 ? message = "Admin Logged In!" : message = "User Logged In!"
         return res.status(200).json({
             success: true,
-            message: "User logged in!",
+            message,
             details,
             token
         })
