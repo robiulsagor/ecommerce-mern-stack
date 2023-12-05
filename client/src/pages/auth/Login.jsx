@@ -28,7 +28,7 @@ const Login = () => {
         setIsLoading(true)
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API}/api/v1/auth/login`, user, {
+            const res = await axios.post('api/auth/login', user, {
                 signal: AbortSignal.timeout(10000) //Aborts request after 10 seconds
             })
             if (res && res.data.success) {

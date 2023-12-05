@@ -27,7 +27,7 @@ const Register = () => {
         setIsLoading(true)
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API}/api/v1/auth/register`, user, {
+            const res = await axios.post('api/auth/register', user, {
                 signal: AbortSignal.timeout(10000) //Aborts request after 10 seconds
             })
 
