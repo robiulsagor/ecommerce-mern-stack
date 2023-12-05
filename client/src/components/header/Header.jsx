@@ -7,11 +7,9 @@ import { logout } from "../../redux/authSlice";
 const Header = () => {
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
-    console.log(auth);
 
     const logoutFunction = () => {
         dispatch(logout())
-        // localStorage.removeItem("auth")?
         toast.success("Logout successfully!")
     }
     return (
@@ -37,10 +35,10 @@ const Header = () => {
                             {
                                 auth.user ? <>
                                     <li className="nav-item">
-                                        <NavLink onClick={logoutFunction} to='/login' className="nav-link">Logout</NavLink>
+                                        <NavLink to='/dashboard' className="nav-link">Dashboard</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink to='/dashboard' className="nav-link">Dashboard</NavLink>
+                                        <NavLink onClick={logoutFunction} to='/login' className="nav-link">Logout</NavLink>
                                     </li>
                                 </> :
                                     <li className="nav-item">
