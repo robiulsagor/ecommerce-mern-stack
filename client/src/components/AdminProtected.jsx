@@ -20,7 +20,7 @@ const AdminProtected = () => {
     useEffect(() => {
         const authCheck = async () => {
             try {
-                const res = await axios.get(`${import.meta.env.VITE_API}/api/v1/auth/admin-auth`, {
+                const res = await axios.get('api/v1/auth/admin-auth', {
                     headers: {
                         'Authorization': auth?.token
                     }
