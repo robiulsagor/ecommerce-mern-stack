@@ -6,12 +6,17 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const SecretQuestions = () => {
+    // single secret input value- both for add and edit
     const [secret, setSecret] = useState("")
 
     // loaded secrets for deleting
     const [loadedSecret, setLoadedSecret] = useState()
+
+    // store all secret question after fetching from DB
     const [allSecrets, setAllSecrets] = useState([])
+    // if any error happens
     const [error, setError] = useState("")
+    // is still fetching data from DB
     const [fetching, setFetching] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -27,6 +32,8 @@ const SecretQuestions = () => {
     // ref for the input
     const inputRef = useRef(null);
 
+    // this is just to fetch secret questions from DB
+    // and store insite 'allSecrets' state
     useEffect(() => {
         const loadSecrets = async () => {
             setFetching(true)
@@ -49,7 +56,7 @@ const SecretQuestions = () => {
         loadSecrets()
     }, [refetch])
 
-
+    // add a secret question
     const handleSubmit = async e => {
         e.preventDefault()
         setLoading(true)
@@ -74,6 +81,7 @@ const SecretQuestions = () => {
 
     }
 
+    // it's name suggests what is does
     const prepareToEdit = data => {
         setMode("edit")
         setSecret(data.name)
@@ -81,6 +89,7 @@ const SecretQuestions = () => {
         inputRef.current.focus()
     }
 
+    // it's name suggests what is does
     const cancelEdit = () => {
         setMode("add")
         setSecret("")
@@ -119,6 +128,7 @@ const SecretQuestions = () => {
 
     }
 
+    // preview before deleting in Modal form
     const previewSecret = async id => {
 
         // find the users count who used this as sequrity question
@@ -168,6 +178,7 @@ const SecretQuestions = () => {
 
                             <h3>Questions: </h3>
 
+                            {/* show the secrets  */}
                             {fetching ? <><div className="d-flex justify-content-center">
                                 <div className="spinner-border" role="status">
                                     <span className="visually-hidden">Loading...</span>
@@ -194,7 +205,6 @@ const SecretQuestions = () => {
                                     </tbody>
                                 </table>
                             </>}
-
 
                         </div>
                     </div>
