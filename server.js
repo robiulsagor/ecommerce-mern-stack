@@ -24,7 +24,7 @@ app.get("/api/v1/test", (req, res) => {
 })
 
 // auth routes
-app.use("/api/v1/auth", authRoutes)
+app.use("/api/v1/auth/", authRoutes)
 
 //admin routes 
 app.use("/api/v1/admin", adminRoutes)

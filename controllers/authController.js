@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js"
+import secretModel from "../models/secretModel.js";
 import { hashPassword, comparePassword, createJWT } from "../helper/authHelper.js"
 
 const registerController = async (req, res) => {
@@ -127,13 +128,81 @@ const loginController = async (req, res) => {
     }
 }
 
+// for password recovery ===========
+// part - 1
+// find user by email and find the 
+// secret question selected by user
+const findUser = async (req, res) => {
+    const { email } = req.query
+    if (!email) {
+        return res.status(400).json({
+            success: false,
+            message: "Please type your email!"
+        })
+    }
+
+    try {
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "No User Found!"
+            })
+        }
+
+        // get the secret question text by id
+        const userQuestion = await secretModel.findOne({ _id: user.question })
+
+        return res.status(200).json({
+            success: true,
+            question: userQuestion
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong!"
+        })
+    }
+}
+
+// part - 2
+// check the secret answer provided by the user
+const checkSecret = async (req, res) => {
+    const { email, secret } = req.query
+    try {
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "No user found!"
+            })
+        }
+
+        if (user.secret !== secret) {
+            return res.status(400).json({
+                success: false,
+                message: "Answer did not match!"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Answer matched!"
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong!"
+        })
+    }
+}
+
+// part - 3
+// change password
 export const passwordReset = async (req, res) => {
-    const { email, secret, newPassword } = req.body
+    const { email, newPassword } = req.body
     if (!email) {
         return res.json({ success: false, message: "Email error" })
-    }
-    if (!secret) {
-        return res.json({ success: false, message: "Please answer secret question." })
     }
     if (!newPassword) {
         return res.json({ success: false, message: "Please type a new password" })
@@ -146,16 +215,11 @@ export const passwordReset = async (req, res) => {
         return res.json({ success: false, message: "No user found with this email" })
     }
 
-    if (secret.trim() !== user.secret) {
-        return res.json({ success: false, message: "Secret answer does not match!" })
-    }
-
     const hashedPassword = await hashPassword(newPassword)
     await userModel.findByIdAndUpdate(user._id, { password: hashedPassword })
 
-    res.json({ success: true, message: "Password changed successfully!" })
-
+    res.status(200).json({ success: true, message: "Password changed successfully!" })
 }
 
 
-export { registerController, loginController }
+export { registerController, loginController, findUser, checkSecret }

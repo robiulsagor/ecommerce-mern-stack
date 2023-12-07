@@ -157,8 +157,12 @@ h1, h2, h3, h4 {
     color: #fff;
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     font-size: 19px;
+}
+
+.auth-form button:disabled {
+    background: black !important;
 }
 
 /* admin question edit delete button */

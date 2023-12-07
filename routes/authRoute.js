@@ -1,9 +1,18 @@
 import express from "express"
-import { loginController, passwordReset, registerController } from "../controllers/authController.js"
+import { checkSecret, findUser, loginController, passwordReset, registerController } from "../controllers/authController.js"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
 
 // router objects
 const router = express.Router()
+
+// password reset ==========
+// part one - find user by email
+router.get("/find-user", findUser)
+
+// part two - check secret answer
+router.get("/check-secret", checkSecret)
+
+// password reset ==========
 
 // register route
 router.post("/register", registerController)
@@ -11,8 +20,10 @@ router.post("/register", registerController)
 // login route
 router.post("/login", loginController)
 
+
+
 // forget password
-router.post("/forgot-password", passwordReset)
+router.put("/change-password", passwordReset)
 
 // user protected route
 router.get("/user-auth", requireSignIn, (req, res) => {
