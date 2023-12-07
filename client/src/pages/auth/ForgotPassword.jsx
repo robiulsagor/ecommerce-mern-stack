@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../../components/layout/Layout'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -70,6 +70,15 @@ const ForgotPassword = () => {
         e.preventDefault();
         part == 1 ? checkUser() : part == 2 ? checkSecret() : part == 3 && changePassword()
     }
+    const emailRef = useRef(null)
+    const secretRef = useRef(null)
+    const passwordRef = useRef(null)
+
+    useEffect(() => {
+        part == 1 && emailRef.current.focus()
+        part == 2 && secretRef.current.focus()
+        part == 3 && passwordRef.current.focus()
+    }, [isLoading, part])
 
     return (
         <Layout title="Reset Password - eCommerce App">
@@ -88,20 +97,23 @@ const ForgotPassword = () => {
 
                                         {/* email check */}
                                         {part === 1 && <>
-                                            <input type="email" id='email' name='email' value={email} onChange={e => setEmail(e.target.value)} className="form-control mb-4" placeholder="Your email here" disabled={isLoading} required />
+                                            <input type="email" id='email' name='email' value={email} ref={emailRef}
+                                                onChange={e => setEmail(e.target.value)} className="form-control mb-4" placeholder="Your email here" disabled={isLoading} required />
                                         </>
                                         }
 
                                         {/* secret answer check */}
                                         {part === 2 && <>
-                                            <input type="text" id='secret' name='secret' value={secret} onChange={e => setSecret(e.target.value)} className="form-control mb-4"
+                                            <input type="text" id='secret' name='secret' value={secret} ref={secretRef}
+                                                onChange={e => setSecret(e.target.value)} className="form-control mb-4"
                                                 placeholder="Enter Secret answer here" disabled={isLoading} required />
                                         </>
                                         }
 
                                         {/* change password part */}
                                         {part === 3 &&
-                                            <input type="password" id='password' name='newPassword' value={newPassword} onChange={e => setNewPassword(e.target.value)} className="form-control mb-4" placeholder="Type a new password" disabled={isLoading} required />
+                                            <input type="password" id='password' name='newPassword' ref={passwordRef}
+                                                value={newPassword} onChange={e => setNewPassword(e.target.value)} className="form-control mb-4" placeholder="Type a new password" disabled={isLoading} required />
                                         }
 
                                         {/* common button for submitting data */}
