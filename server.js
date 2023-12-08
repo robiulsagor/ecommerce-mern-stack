@@ -6,7 +6,7 @@ import { connectDB } from "./config/db.js";
 
 import authRoutes from "./routes/authRoute.js"
 import adminRoutes from "./routes/adminRoute.js"
-import categoryRoutes from ".routes/categoryRoute.js"
+import categoryRoutes from "./routes/categoryRoute.js"
 
 // database config
 connectDB()
@@ -26,7 +26,6 @@ app.get("/api/v1/test", (req, res) => {
 app.use("/api/v1/auth/", authRoutes)
 app.use("/api/v1/admin", adminRoutes)
 app.use("/api/v1/category", categoryRoutes)
-
 
 // create api
 app.get("/", (req, res) => {

@@ -8,15 +8,15 @@ const router = express.Router()
 router.post("/create-category", requireSignIn, isAdmin, createCategory)
 
 // update a category
-router.post("/update-category", requireSignIn, isAdmin, updateCategory)
+router.put("/update-category", requireSignIn, isAdmin, updateCategory)
 
 // delete a category
-router.post("/delete-category/:id", requireSignIn, isAdmin, deleteCategory)
+router.delete("/delete-category/:id", requireSignIn, isAdmin, deleteCategory)
 
 // show all categories
-router.post("/get-all-categories", getAllCategories)
+router.get("/get-all-categories", getAllCategories)
 
 // show single category
-router.post("/single-category/:id", singleCategory)
+router.get("/single-category/:id", singleCategory)
 
 export default router
