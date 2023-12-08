@@ -120,16 +120,18 @@ const SecretQuestions = () => {
             const res = await axios.delete(`/api/admin/delete-secret?id=${loadedSecret._id}`)
             toast.success("deleted")
             setRefetch(true)
+            setLoadedSecret("")
         } catch (error) {
             console.log(error);
             toast.error("couldn't delete")
+            setLoadedSecret("")
         }
-
-
     }
 
     // preview before deleting in Modal form
     const previewSecret = async id => {
+        // first, make the loaded secret empty, so it refetches every time
+        setLoadedSecret("")
 
         // find the users count who used this as sequrity question
         const findUser = await axios.get(`/api/admin/view-user-with-this-question?id=${id}`)
@@ -223,13 +225,23 @@ const SecretQuestions = () => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">
-                            Are you sure to delete this security question: <br /> <b> {loadedSecret?.name} ?</b>
-                            <br />
-                            <i>  → {usedUser > 0 ? `Used by ${usedUser} user` : 'None used it.'}</i>
+                            {loadedSecret ?
+                                <div>
+                                    Are you sure to delete this security question: <br /> <b> {loadedSecret?.name} ?</b>
+                                    <br />
+                                    <i>  → {usedUser > 0 ? `Used by ${usedUser} user` : 'None used it.'}</i>
+                                </div> :
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            }
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <button type="button" className="btn btn-primary" onClick={deleteSecret} data-bs-dismiss="modal">Yes</button>
+                            <button type="button" className="btn btn-primary" onClick={deleteSecret} data-bs-dismiss="modal"
+                                disabled={!loadedSecret} >Yes</button>
                         </div>
                     </div>
                 </div>
