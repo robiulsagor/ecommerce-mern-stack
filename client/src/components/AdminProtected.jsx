@@ -35,7 +35,7 @@ const AdminProtected = () => {
             } catch (error) {
                 setOk(false)
                 console.log(error);
-                navigate("/")
+                navigate("/user/dashboard")
                 toast.error(error.response.data.message)
                 console.log("loggging22");
             }

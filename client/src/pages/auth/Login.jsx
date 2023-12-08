@@ -32,13 +32,15 @@ const Login = () => {
                 signal: AbortSignal.timeout(10000) //Aborts request after 10 seconds
             })
             if (res && res.data.success) {
-                navigate(location.state || "/")
+
+                navigate(location.state || (res.data.details.role === 0 ? "/user/dashboard" : "/admin/dashboard"))
                 dispatch(login({ user: res.data.details, token: res.data.token }))
                 toast.success(res.data.message, { id: "notification" })
             }
             if (res && !res.data.success) {
                 toast.error(res.data.message, { id: "notification" })
             }
+            console.log(res);
             setIsLoading(false)
         } catch (error) {
             console.log(error);

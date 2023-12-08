@@ -32,6 +32,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ForgotPassword from './pages/auth/ForgotPassword.jsx';
 import SecretQuestions from './pages/admin/secretQuestions.jsx';
 import AdminProtected from './components/AdminProtected.jsx';
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -49,12 +50,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='/privacy' element={<Privacy />} />
 
           {/* for logged users only */}
-          <Route path='/dashboard' element={<ProtectedRoute />} >
-            <Route path='' element={<Dashboard />} />
+          <Route path='/user' element={<ProtectedRoute />} >
+            <Route path='dashboard' element={<Dashboard />} />
           </Route>
 
           {/* for admins only */}
           <Route path='/admin' element={<AdminProtected />} >
+            <Route path='dashboard' element={<AdminDashboard />} />
             <Route path='secret' element={<SecretQuestions />} />
           </Route>
 
