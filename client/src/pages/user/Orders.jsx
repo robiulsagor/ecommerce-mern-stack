@@ -4,7 +4,7 @@ import UserMenu from '../../components/UserMenu'
 
 const Orders = () => {
     return (
-        <Layout title={"Create Product - eCommerce App"}>
+        <Layout title={"Orders - eCommerce App"}>
             <div className="container-fluid">
                 <div className="row  px-2 py-5">
                     <div className="col-3">
