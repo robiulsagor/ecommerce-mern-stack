@@ -192,7 +192,7 @@ const SecretQuestions = () => {
                                         {allSecrets.map((sec, i) => {
                                             return <tr key={sec._id}>
                                                 <th scope="row">{i + 1} </th>
-                                                <td>{sec.name} ?</td>
+                                                <td>{sec.name}?</td>
                                                 <td className='text-center'>
                                                     <span onClick={() => prepareToEdit(sec)}
                                                         className='action_btn action_edit'> <FaPencil /></span>
@@ -227,7 +227,7 @@ const SecretQuestions = () => {
                         <div className="modal-body">
                             {loadedSecret ?
                                 <div>
-                                    Are you sure to delete this security question: <br /> <b> {loadedSecret?.name} ?</b>
+                                    Are you sure to delete this security question: <br /> <b> {loadedSecret?.name}</b>?
                                     <br />
                                     <i>  → {usedUser > 0 ? `Used by ${usedUser} user` : 'None used it.'}</i>
                                 </div> :
