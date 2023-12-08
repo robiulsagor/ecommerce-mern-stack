@@ -34,6 +34,9 @@ import SecretQuestions from './pages/admin/secretQuestions.jsx';
 import AdminProtected from './components/AdminProtected.jsx';
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
 import Orders from './pages/user/Orders.jsx';
+import CreateCategory from './pages/admin/CreateCategory.jsx';
+import CreateProduct from './pages/admin/CreateProduct.jsx';
+import Users from './pages/admin/Users.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -59,6 +62,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           {/* for admins only */}
           <Route path='/admin' element={<AdminProtected />} >
             <Route path='dashboard' element={<AdminDashboard />} />
+            <Route path='create-category' element={<CreateCategory />} />
+            <Route path='create-product' element={<CreateProduct />} />
+            <Route path='users' element={<Users />} />
             <Route path='secret' element={<SecretQuestions />} />
           </Route>
 
