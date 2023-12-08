@@ -6,6 +6,7 @@ import { connectDB } from "./config/db.js";
 
 import authRoutes from "./routes/authRoute.js"
 import adminRoutes from "./routes/adminRoute.js"
+import categoryRoutes from ".routes/categoryRoute.js"
 
 // database config
 connectDB()
@@ -22,12 +23,9 @@ app.use(cors())
 app.get("/api/v1/test", (req, res) => {
     res.json("THis is a test route")
 })
-
-// auth routes
 app.use("/api/v1/auth/", authRoutes)
-
-//admin routes 
 app.use("/api/v1/admin", adminRoutes)
+app.use("/api/v1/category", categoryRoutes)
 
 
 // create api
