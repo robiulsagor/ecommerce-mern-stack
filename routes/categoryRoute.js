@@ -8,7 +8,7 @@ const router = express.Router()
 router.post("/create-category", requireSignIn, isAdmin, createCategory)
 
 // update a category
-router.put("/update-category", requireSignIn, isAdmin, updateCategory)
+router.put("/update-category/:id", requireSignIn, isAdmin, updateCategory)
 
 // delete a category
 router.delete("/delete-category/:id", requireSignIn, isAdmin, deleteCategory)

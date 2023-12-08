@@ -1,3 +1,4 @@
+import slugify from "slugify";
 import categoryModel from "../models/categoryModel.js";
 
 // create a category
@@ -5,7 +6,6 @@ export const createCategory = async (req, res) => {
     const { name } = req.body
     try {
         const category = await new categoryModel({ name, slug: slugify(name) }).save()
-        console.log(category);
         return res.status(201).json({
             success: true,
             message: "Category created successfully!",
@@ -23,12 +23,12 @@ export const createCategory = async (req, res) => {
 // update a category
 export const updateCategory = async (req, res) => {
     const { id } = req.params
-    const name = req.body
-    console.log(id);
+    const { name } = req.body
+
     try {
-        const updated = await categoryModel.findByIdAndUpdate(id, name, { new: true })
+        const updated = await categoryModel.findByIdAndUpdate(id, { name, slug: slugify(name) }, { new: true })
         console.log(updated);
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             message: "Category updated successfully!",
             updated
@@ -47,7 +47,7 @@ export const deleteCategory = async (req, res) => {
     const { id } = req.params
     try {
         await categoryModel.findByIdAndDelete(id)
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             message: "Category deleted successfully!",
         })
@@ -65,7 +65,7 @@ export const getAllCategories = async (req, res) => {
     try {
         const categories = await categoryModel.find()
         console.log(categories);
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             message: "Categories fetched!",
             categories
@@ -81,11 +81,11 @@ export const getAllCategories = async (req, res) => {
 
 // show a single category
 export const singleCategory = async (req, res) => {
-    const { name } = req.params
+    const { id } = req.params
     try {
-        const category = await categoryModel.findOne({ name })
+        const category = await categoryModel.findOne({ _id: id })
         console.log(category);
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             message: "category fetched!",
             category
