@@ -47,7 +47,7 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await productModel.find().select("-photo").limit(2).sort({ createdAt: -1 })
+        const products = await productModel.find().select("-photo").limit(10).sort({ createdAt: -1 })
             .populate("category")
         console.log(products);
         res.status(200).json({
@@ -73,6 +73,39 @@ export const getSingleProduct = async (req, res) => {
             success: true,
             message: "Product fetched!",
             product
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong!"
+        })
+    }
+}
+
+export const getProductPhoto = async (req, res) => {
+    // const 
+    try {
+        const product = await productModel.findById(req.params.id).select("photo")
+        if (product.photo.data) {
+            res.set('Content-Type', product.photo.contentType)
+            return res.send(product.photo.data)
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong!"
+        })
+    }
+}
+
+export const deleteProduct = async (req, res) => {
+    try {
+        await productModel.findByIdAndDelete(req.params.id)
+        res.status(200).json({
+            success: true,
+            message: "Product deleted successfully!"
         })
     } catch (error) {
         console.log(error);
