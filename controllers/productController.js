@@ -44,3 +44,27 @@ export const createProduct = async (req, res) => {
         })
     }
 }
+
+export const getProducts = async (req, res) => {
+    try {
+        const products = await productModel.find().select("-photo").limit(2).sort({ createdAt: -1 })
+        console.log(products);
+        res.status(200).json({
+            success: true,
+            message: "All products fetched!",
+            productCoutnt: products.length,
+            products
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong!"
+        })
+    }
+}
+
+// export const updateProduct = async (req, res) => {
+//     const { id } = req.params
+//     const
+// }
