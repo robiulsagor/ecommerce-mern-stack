@@ -10,8 +10,10 @@ import CategoryModal from '../../components/categoryModal/categoryModal'
 const CreateCategory = () => {
     const [categories, setCategories] = useState([])
     const [value, setValue] = useState("")
+    const [updateValue, setUpdateValue] = useState("")
     const [selected, setSelected] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [mode, setMode] = useState(null)
 
     const getAllCategories = async () => {
         try {
@@ -72,7 +74,7 @@ const CreateCategory = () => {
             setSelected(null)
             setLoading(false)
             // hide modal
-            $("#deleteModal").modal("hide");
+            $("#modal").modal("hide");
         } catch (error) {
             console.log(error);
             toast.error(error?.response?.data?.message || error?.message == "canceled" && "Network Error" || "Error ")
@@ -80,7 +82,26 @@ const CreateCategory = () => {
         }
     }
 
-
+    const updateCategory = async () => {
+        setLoading(true)
+        try {
+            const updated = await axios.put(`/api/category/update-category/${selected._id}`, { name: updateValue })
+            const { data } = updated
+            if (data?.success) {
+                // setCategories(data.categories)
+                toast.success("Category updated successfully!")
+                $("#modal").modal("hide")
+                getAllCategories()
+            } else {
+                toast.error(data.message || "Error updating category!")
+            }
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            toast.error(error?.response?.data?.message || error?.message == "canceled" && "Network Error" || "Error ")
+            setLoading(false)
+        }
+    }
 
     // remove from state
     const removeSelectedCategory = () => {
@@ -120,8 +141,9 @@ const CreateCategory = () => {
                                                     <th scope="row"> {i + 1}</th>
                                                     <td>{cat.name} </td>
                                                     <td>
-                                                        <button type="button" className="btn btn-primary me-2" >Edit</button>
-                                                        <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal" onClick={(() => setSelected(cat))}>Delete</button>
+                                                        <button type="button" className="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modal"
+                                                            onClick={(() => { setSelected(cat); setUpdateValue(cat.name); setMode("edit") })}>Edit</button>
+                                                        <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal" onClick={(() => { setSelected(cat); setMode("delete") })}>Delete</button>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -135,10 +157,8 @@ const CreateCategory = () => {
                     </div>
 
                     {/* <!-- Delete Modal --> */}
-                    <CategoryModal mode={"delete"} selected={selected} loading={loading} handleClick={deleteCategory} removeSelectedCategory={removeSelectedCategory} />
+                    <CategoryModal mode={mode} selected={selected} loading={loading} handleClick={mode == "edit" ? updateCategory : deleteCategory} removeSelectedCategory={removeSelectedCategory} updateValue={updateValue} setUpdateValue={setUpdateValue} />
 
-                    {/* <!-- Edit Modal --> */}
-                    <CategoryModal mode={"edit"} selected={selected} loading={loading} deleteCategory={deleteCategory} removeSelectedCategory={removeSelectedCategory} />
                 </div>
             </div>
         </Layout>

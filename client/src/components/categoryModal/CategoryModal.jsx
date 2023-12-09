@@ -1,7 +1,7 @@
 import React from 'react'
 import Loading from '../Loading'
 
-const CategoryModal = ({ mode, selected, loading, handleClick, removeSelectedCategory }) => {
+const CategoryModal = ({ mode, selected, loading, handleClick, removeSelectedCategory, updateValue, setUpdateValue }) => {
     return (
         <div className="modal fade" id="modal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
@@ -11,7 +11,12 @@ const CategoryModal = ({ mode, selected, loading, handleClick, removeSelectedCat
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
-                        <p>Are you sure to delete this category- <i> <b> {selected?.name}</b> </i>? </p>
+                        {mode == "delete" && <p>Are you sure to delete this category- <i> <b> {selected?.name}</b> </i>? </p>}
+                        {mode == "edit" && (
+                            <form onSubmit={(e) => { e.preventDefault(); handleClick() }}>
+                                <input type="text" value={updateValue} onChange={e => setUpdateValue(e.target.value)} placeholder='Category name' className='form-control' />
+                            </form>
+                        )}
                     </div>
                     <div className="modal-footer">
                         {loading ? <Loading /> : (
