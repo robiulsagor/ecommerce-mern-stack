@@ -5,6 +5,7 @@ import CategoryForm from '../../components/form/CategoryForm'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import Loading from '../../components/Loading'
+import CategoryModal from '../../components/categoryModal/categoryModal'
 
 const CreateCategory = () => {
     const [categories, setCategories] = useState([])
@@ -79,6 +80,8 @@ const CreateCategory = () => {
         }
     }
 
+
+
     // remove from state
     const removeSelectedCategory = () => {
         setSelected(null)
@@ -118,7 +121,7 @@ const CreateCategory = () => {
                                                     <td>{cat.name} </td>
                                                     <td>
                                                         <button type="button" className="btn btn-primary me-2" >Edit</button>
-                                                        <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={(() => setSelected(cat))}>Delete</button>
+                                                        <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal" onClick={(() => setSelected(cat))}>Delete</button>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -132,27 +135,10 @@ const CreateCategory = () => {
                     </div>
 
                     {/* <!-- Delete Modal --> */}
-                    <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h1 className="modal-title fs-5" id="exampleModalLabel">Delete Category</h1>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div className="modal-body">
-                                    <p>Are you sure to delete this category- <i> <b> {selected?.name}</b> </i>? </p>
-                                </div>
-                                <div className="modal-footer">
-                                    {loading ? <Loading /> : (
-                                        <>
-                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={removeSelectedCategory}>Cancel</button>
-                                            <button type="button" className="btn btn-danger" onClick={deleteCategory}>Delete</button>
-                                        </>)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <CategoryModal mode={"delete"} selected={selected} loading={loading} handleClick={deleteCategory} removeSelectedCategory={removeSelectedCategory} />
 
+                    {/* <!-- Edit Modal --> */}
+                    <CategoryModal mode={"edit"} selected={selected} loading={loading} deleteCategory={deleteCategory} removeSelectedCategory={removeSelectedCategory} />
                 </div>
             </div>
         </Layout>
