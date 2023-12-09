@@ -18,6 +18,6 @@ router.get("/get-product/:slug", getSingleProduct)
 router.get("/get-product-photo/:id", getProductPhoto)
 
 // delete product 
-router.get("/delete-product/:id", requireSignIn, isAdmin, deleteProduct)
+router.delete("/delete-product/:id", requireSignIn, isAdmin, deleteProduct)
 
 export default router
