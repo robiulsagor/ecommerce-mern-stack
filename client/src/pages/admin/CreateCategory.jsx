@@ -39,7 +39,9 @@ const CreateCategory = () => {
         setLoading(true)
 
         try {
-            const addCat = await axios.post("/api/category/create-category", { name: value })
+            const addCat = await axios.post("/api/category/create-category", { name: value }, {
+                signal: AbortSignal.timeout(5000) //Aborts request after 5 seconds
+            })
             if (addCat?.data.success) {
                 toast.success(`Category ${value} has been added!`)
                 getAllCategories()
@@ -51,7 +53,7 @@ const CreateCategory = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error(error?.response?.data?.message || "Error ")
+            toast.error(error?.response?.data?.message || error?.message == "canceled" && "Network Error" || "Error ")
             setLoading(false)
         }
     }
