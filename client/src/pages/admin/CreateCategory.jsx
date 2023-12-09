@@ -14,8 +14,10 @@ const CreateCategory = () => {
     const [selected, setSelected] = useState(null)
     const [loading, setLoading] = useState(false)
     const [mode, setMode] = useState(null)
+    const [allLoading, setAllLoading] = useState(false)
 
     const getAllCategories = async () => {
+        setAllLoading(true)
         try {
             const categories = await axios.get("/api/category/get-all-categories")
             const { data } = categories
@@ -24,10 +26,11 @@ const CreateCategory = () => {
             } else {
                 toast.error(data.message || "Error fetching categories!")
             }
-
+            setAllLoading(false)
         } catch (error) {
             console.log(error);
             toast.error("Error fetching category list!")
+            setAllLoading(false)
         }
     }
 
@@ -118,13 +121,13 @@ const CreateCategory = () => {
                     </div>
                     <div className="col-7">
                         <div className="card p-3">
-                            <h2 className='mb-3'>Create Category</h2>
+                            <h2 className='mb-3'>Manage Category</h2>
                             <CategoryForm handler={addCategory} value={value} setValue={setValue} loading={loading} setLoading={setLoading} />
 
                             {/* display categories */}
                             <div className='mt-4'>
                                 <h2>Category List</h2>
-                                {categories?.length > 0 ? (
+                                {allLoading ? <Loading /> : categories?.length > 0 ? (
 
                                     <table className="table ">
                                         <thead>
