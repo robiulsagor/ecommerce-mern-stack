@@ -4,6 +4,15 @@ import categoryModel from "../models/categoryModel.js";
 // create a category
 export const createCategory = async (req, res) => {
     const { name } = req.body
+    const check = await categoryModel.findOne({ name })
+
+    if (check) {
+        return res.status(500).json({
+            success: false,
+            message: "This category already exists!"
+        })
+    }
+
     try {
         const category = await new categoryModel({ name, slug: slugify(name) }).save()
         return res.status(201).json({
@@ -15,7 +24,8 @@ export const createCategory = async (req, res) => {
         console.log(error);
         res.status(500).json({
             success: false,
-            message: "Something went wrong!"
+            message: "Something went wrong!",
+            error
         })
     }
 }
