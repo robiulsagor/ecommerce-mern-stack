@@ -116,7 +116,47 @@ export const deleteProduct = async (req, res) => {
     }
 }
 
-// export const updateProduct = async (req, res) => {
-//     const { id } = req.params
-//     const
-// }
+export const updateProduct = async (req, res) => {
+    const { name, description, price, category, quantity } = req.fields
+    const { photo } = req.files
+
+    if (!name) {
+        return res.status(400).json({ message: "Please enter product name!" })
+    }
+    if (!description) {
+        return res.status(400).json({ message: "Please enter product description!" })
+    }
+    if (!price) {
+        return res.status(400).json({ message: "Please enter product price!" })
+    }
+    if (!category) {
+        return res.status(400).json({ message: "Please enter product category!" })
+    }
+    if (!quantity) {
+        return res.status(400).json({ message: "Please enter product quantity!" })
+    }
+    if (!photo | photo?.size > 1048576) {
+        return res.status(400).json({ message: "Photo is required and must not be more than 1 MB!" })
+    }
+    try {
+        const product = await productModel.findByIdAndUpdate(req.params.id,
+            { ...req.fields, slug: slugify(name) }, { new: true })
+
+        if (photo) {
+            product.photo.data = fs.readFileSync(photo.path)
+            product.photo.contentType = photo.type
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Product updated successfully!",
+            product
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong!"
+        })
+    }
+}
