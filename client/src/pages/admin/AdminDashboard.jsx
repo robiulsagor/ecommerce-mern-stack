@@ -9,12 +9,12 @@ const AdminDashboard = () => {
 
     return (
         <Layout title={"Admin Dashboard"}>
-            <div className="container-fluid">
+            <div className="container">
                 <div className="row  px-2 py-5">
                     <div className="col-3">
                         <AdminMenu />
                     </div>
-                    <div className="col-9">
+                    <div className="col-7">
                         <div className="card p-3">
                             <h2 className='mb-3'>Hello Admin!</h2>
                             <h4>Admin Name: <i>{user.name} </i></h4>

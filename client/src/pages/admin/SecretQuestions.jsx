@@ -4,6 +4,7 @@ import { FaPencil } from "react-icons/fa6";
 import { FaRegTrashAlt } from "react-icons/fa";
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import AdminMenu from '../../components/AdminMenu';
 
 const SecretQuestions = () => {
     // single secret input value- both for add and edit
@@ -149,8 +150,11 @@ const SecretQuestions = () => {
         <Layout>
             <div className="container">
                 <div className="row py-5 ">
-                    <div className="col-lg-6 col-md-9 col-sm-10 mx-auto ">
-                        <div className='common-container-1'>
+                    <div className="col-3">
+                        <AdminMenu />
+                    </div>
+                    <div className=" col-md-7  ">
+                        <div className='card p-3 px-4 '>
 
                             <h2 className='text-center  mb-3'>Secret Questions →</h2>
                             <h3> {mode == "add" ? "Add" : "Edit"} Question :</h3>

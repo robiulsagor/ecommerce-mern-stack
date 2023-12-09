@@ -111,13 +111,13 @@ const CreateCategory = () => {
 
     return (
         <Layout title={"Create Category - eCommerce App"}>
-            <div className="container-fluid">
+            <div className="container">
                 <div className="row  px-2 py-5">
                     <div className="col-3">
                         <AdminMenu />
                     </div>
-                    <div className="col-9">
-                        <div className="card p-3 w-75">
+                    <div className="col-7">
+                        <div className="card p-3">
                             <h2 className='mb-3'>Create Category</h2>
                             <CategoryForm handler={addCategory} value={value} setValue={setValue} loading={loading} setLoading={setLoading} />
 
@@ -126,7 +126,7 @@ const CreateCategory = () => {
                                 <h2>Category List</h2>
                                 {categories?.length > 0 ? (
 
-                                    <table className="table w-75">
+                                    <table className="table ">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style={{ width: "50px" }}>#</th>
