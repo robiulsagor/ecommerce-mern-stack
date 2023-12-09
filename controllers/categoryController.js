@@ -74,7 +74,6 @@ export const deleteCategory = async (req, res) => {
 export const getAllCategories = async (req, res) => {
     try {
         const categories = await categoryModel.find()
-        console.log(categories);
         return res.status(200).json({
             success: true,
             message: "Categories fetched!",
