@@ -1,6 +1,6 @@
 import express from "express"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
-import { createProduct, getProducts } from "../controllers/productController.js"
+import { createProduct, getProducts, getSingleProduct } from "../controllers/productController.js"
 import formidable from "express-formidable"
 
 const router = express.Router()
@@ -9,6 +9,9 @@ const router = express.Router()
 router.post("/create-product", requireSignIn, isAdmin, formidable(), createProduct)
 
 // get all products
-router.get("/all-products", getProducts)
+router.get("/get-products", getProducts)
+
+// get single product
+router.get("/get-product/:slug", getSingleProduct)
 
 export default router

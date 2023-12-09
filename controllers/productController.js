@@ -48,12 +48,31 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
     try {
         const products = await productModel.find().select("-photo").limit(2).sort({ createdAt: -1 })
+            .populate("category")
         console.log(products);
         res.status(200).json({
             success: true,
             message: "All products fetched!",
             productCoutnt: products.length,
             products
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong!"
+        })
+    }
+}
+
+export const getSingleProduct = async (req, res) => {
+    const { slug } = req.params
+    try {
+        const product = await productModel.find({ slug }).select("-photo").populate("category")
+        res.status(200).json({
+            success: true,
+            message: "Product fetched!",
+            product
         })
     } catch (error) {
         console.log(error);
