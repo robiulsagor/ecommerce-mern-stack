@@ -9,7 +9,7 @@ const router = express.Router()
 router.post("/create-product", requireSignIn, isAdmin, formidable(), createProduct)
 
 // get all products
-router.get("/get-products", getProducts)
+router.get("/get-product", getProducts)
 
 // get single product
 router.get("/get-product/:slug", getSingleProduct)
