@@ -12,7 +12,7 @@ router.post("/create-product", requireSignIn, isAdmin, formidable(), createProdu
 router.get("/get-product", getProducts)
 
 // get single product
-router.get("/get-product/:slug", getSingleProduct)
+router.get("/get-product/:id", getSingleProduct)
 
 // get product photo
 router.get("/get-product-photo/:id", getProductPhoto)

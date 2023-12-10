@@ -49,7 +49,6 @@ export const getProducts = async (req, res) => {
     try {
         const products = await productModel.find().select("-photo").limit(10).sort({ createdAt: -1 })
             .populate("category")
-        console.log(products);
         res.status(200).json({
             success: true,
             message: "All products fetched!",
@@ -66,9 +65,9 @@ export const getProducts = async (req, res) => {
 }
 
 export const getSingleProduct = async (req, res) => {
-    const { slug } = req.params
+    const { id } = req.params
     try {
-        const product = await productModel.find({ slug }).select("-photo").populate("category")
+        const product = await productModel.findById(id).populate("category")
         res.status(200).json({
             success: true,
             message: "Product fetched!",
@@ -84,7 +83,6 @@ export const getSingleProduct = async (req, res) => {
 }
 
 export const getProductPhoto = async (req, res) => {
-    // const 
     try {
         const product = await productModel.findById(req.params.id).select("photo")
         if (product.photo.data) {
@@ -135,7 +133,7 @@ export const updateProduct = async (req, res) => {
     if (!quantity) {
         return res.status(400).json({ message: "Please enter product quantity!" })
     }
-    if (!photo | photo?.size > 1048576) {
+    if ((photo && photo?.size) > 1048576) {
         return res.status(400).json({ message: "Photo is required and must not be more than 1 MB!" })
     }
     try {
@@ -143,10 +141,10 @@ export const updateProduct = async (req, res) => {
             { ...req.fields, slug: slugify(name) }, { new: true })
 
         if (photo) {
-            product.photo.data = fs.readFileSync(photo.path)
-            product.photo.contentType = photo.type
+            product.photo.data = fs.readFileSync(photo.path);
+            product.photo.contentType = photo.type;
         }
-
+        await product.save()
         res.status(200).json({
             success: true,
             message: "Product updated successfully!",

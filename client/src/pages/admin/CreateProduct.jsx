@@ -16,7 +16,7 @@ const CreateProduct = () => {
     const [price, setPrice] = useState("")
     const [quantity, setQuantity] = useState("")
     const [photo, setPhoto] = useState(null)
-    const [delivery, setDelivery] = useState(0)
+    const [shipping, setShipping] = useState(0)
 
     const [loading, setLoading] = useState(false)
 
@@ -63,7 +63,7 @@ const CreateProduct = () => {
         product.append("price", price)
         product.append("quantity", quantity)
         product.append("photo", photo)
-        product.append("delivery", delivery)
+        product.append("shipping", shipping)
 
         setLoading(true)
         try {
@@ -77,7 +77,7 @@ const CreateProduct = () => {
             setPrice("")
             setQuantity("")
             setPhoto("")
-            setDelivery(0)
+            setShipping(0)
             setLoading(false)
 
         } catch (error) {
@@ -158,7 +158,7 @@ const CreateProduct = () => {
                                             placeholder="Select a shipping method"
                                             size='large'
                                             optionFilterProp="children"
-                                            onChange={(value) => setDelivery(value)}
+                                            onChange={(value) => setShipping(value)}
                                             filterOption={filterOption}
                                             options={[
                                                 {
