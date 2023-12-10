@@ -198,8 +198,47 @@ h1.normal, h2.normal, h3.normal, h4.normal {
     border-radius: 10px;
     padding: 25px 35px;
 }
+
+/*  =========== admin panel======= */
 .photo-cancel-btn{
     position: absolute;
     right: 10px;
     top: 10px;
+}
+
+.product-grid-admin{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.product-grid-admin > div{
+    margin: 10px;
+}
+
+/* @media (max-width: 1120px) {
+    .product-grid-admin{
+        grid-template-columns: repeat(2, 1fr);
+    }
+} */
+
+@media (max-width: 768px) {
+    .product-grid-admin{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid-admin{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-grid-admin > div{
+    margin: 5px;
+}
+}
+
+@media (max-width: 375px) {
+    .product-grid-admin{
+        grid-template-columns: 1fr;
+    }
 }
