@@ -148,13 +148,13 @@ const SecretQuestions = () => {
 
     return (
         <Layout>
-            <div className="container">
-                <div className="row py-5 ">
-                    <div className="col-3">
+            <div className="container-fluid">
+                <div className="row  px-2 py-5">
+                    <div className="col-sm-4 col-md-3 col-xxl-2 ">
                         <AdminMenu />
                     </div>
-                    <div className=" col-md-7  ">
-                        <div className='card p-3 px-4 '>
+                    <div className="col-12  col-sm-8 col-md-9 my-2 my-sm-0">
+                        <div className="card p-3">
 
                             <h2 className='text-center  mb-3'>Secret Questions →</h2>
                             <h3> {mode == "add" ? "Add" : "Edit"} Question :</h3>

@@ -114,12 +114,12 @@ const CreateCategory = () => {
 
     return (
         <Layout title={"Create Category - eCommerce App"}>
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row  px-2 py-5">
-                    <div className="col-3">
+                    <div className="col-sm-4 col-md-3 col-xxl-2 ">
                         <AdminMenu />
                     </div>
-                    <div className="col-7">
+                    <div className="col-12  col-sm-8 col-md-9 my-2 my-sm-0">
                         <div className="card p-3">
                             <h2 className='mb-3'>Manage Category</h2>
                             <CategoryForm handler={addCategory} value={value} setValue={setValue} loading={loading} setLoading={setLoading} />
