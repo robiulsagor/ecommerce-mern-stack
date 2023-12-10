@@ -29,7 +29,7 @@ const Login = () => {
 
         try {
             const res = await axios.post('api/auth/login', user, {
-                signal: AbortSignal.timeout(10000) //Aborts request after 10 seconds
+                signal: AbortSignal.timeout(6000) //Aborts request after 6 seconds
             })
             if (res && res.data.success) {
 
@@ -46,7 +46,8 @@ const Login = () => {
             console.log(error);
             setIsLoading(false)
             if (error && error.message) {
-                toast.error(`Error: ${error.message}`, { id: "notification" })
+                // toast.error(`Error: ${error.message}`, { id: "notification" })
+                toast.error("Network Error!")
             } else {
                 toast.error("Something went wrong!", { id: "notification" })
             }
