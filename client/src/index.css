@@ -198,3 +198,8 @@ h1.normal, h2.normal, h3.normal, h4.normal {
     border-radius: 10px;
     padding: 25px 35px;
 }
+.photo-cancel-btn{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
