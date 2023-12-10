@@ -37,6 +37,7 @@ import Orders from './pages/user/Orders.jsx';
 import CreateCategory from './pages/admin/CreateCategory.jsx';
 import CreateProduct from './pages/admin/CreateProduct.jsx';
 import Users from './pages/admin/Users.jsx';
+import Products from './pages/admin/Products.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -64,6 +65,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path='dashboard' element={<AdminDashboard />} />
             <Route path='create-category' element={<CreateCategory />} />
             <Route path='create-product' element={<CreateProduct />} />
+            <Route path='products' element={<Products />} />
             <Route path='users' element={<Users />} />
             <Route path='secret' element={<SecretQuestions />} />
           </Route>
