@@ -4,6 +4,7 @@ import AdminMenu from '../../components/AdminMenu'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import Loading from '../../components/Loading'
+import { Link } from 'react-router-dom'
 
 const Products = () => {
     const [products, setProducts] = useState([
@@ -136,20 +137,27 @@ const Products = () => {
 
                             <div className='mt-3 product-grid-admin'>
                                 {loading ? <Loading /> : products.map(product => (
-                                    <div key={product._id} className='card  p-3 '>
+                                    <Link to={product._id} key={product._id} className='product-link-admin'>
+                                        <div className='card  p-3 product-card-admin'>
+                                            <img src={`/api/product/get-product-photo/${product._id}`} alt="Product Image"
+                                                className='mx-auto img-fluid' />
+                                            <h4>{product.name} </h4>
+                                            {/* <p>{product.description} </p> */}
+                                            <div className="row">
+                                                <div className="col"> ${product.price} </div>
+                                                <div className="col">{product.price} </div>
+                                            </div>
+                                            {console.log(typeof (product.quantity))}
+                                        </div>
+                                    </Link>
 
-                                        <img src={`/api/product/get-product-photo/${product._id}`} alt="Product Image"
-                                            className='mx-auto img-fluid' />
-                                        <h4>{product.name} </h4>
-                                        <p>{product.description} </p>
-                                    </div>
                                 ))}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </Layout>
+        </Layout >
 
     )
 }
