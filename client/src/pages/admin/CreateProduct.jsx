@@ -7,6 +7,8 @@ import { Button, message, Upload } from 'antd';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import Loading from '../../components/Loading'
+import { storage } from '../../firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const CreateProduct = () => {
     const [categories, setCategories] = useState([])
@@ -16,6 +18,7 @@ const CreateProduct = () => {
     const [price, setPrice] = useState("")
     const [quantity, setQuantity] = useState("")
     const [photo, setPhoto] = useState(null)
+    const [photoName, setPhotoName] = useState(null)
     const [shipping, setShipping] = useState(0)
 
     const [loading, setLoading] = useState(false)
@@ -49,25 +52,51 @@ const CreateProduct = () => {
         getAllCategories()
     }, [])
 
+    // upload photo
+    useEffect(() => {
+        const uploadPhoto = () => {
+            const randomName = Date.now()
+            const fileName = randomName + "-" + photo.name
+            const storageRef = ref(storage, `images/${fileName}`)
+            const uploadTask = uploadBytesResumable(storageRef, photo);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                },
+                (error) => {
+                    toast.error("File upload unsuccessful")
+                },
+                () => {
+                    toast.success("File uploaded successfully!")
+                    console.log(fileName);
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        setPhotoName(downloadURL)
+                    });
+                }
+            );
+
+        }
+        photo && uploadPhoto()
+    }, [photo])
+    console.log(photoName);
+
     const handleSubmit = async e => {
         e.preventDefault()
-        if (!category || !photo || !name || !description || !quantity || !price) {
+        if (!category || !photoName || !name || !description || !quantity || !price) {
             toast.error("All  field are required!")
             return;
         }
 
-        const product = new FormData()
-        product.append("name", name)
-        product.append("description", description)
-        product.append("category", category)
-        product.append("price", price)
-        product.append("quantity", quantity)
-        product.append("photo", photo)
-        product.append("shipping", shipping)
-
         setLoading(true)
         try {
-            const saved = await axios.post("/api/product/create-product", product)
+            const saved = await axios.post("/api/product/create-product",
+                {
+                    name, description, price, category, quantity, photoName, shipping
+                }
+            )
             console.log(saved);
             toast.success("Product added!")
 
@@ -81,8 +110,8 @@ const CreateProduct = () => {
             setLoading(false)
 
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong")
+            console.log(error.response.data || "Error");
+            toast.error(error.response.data.message || "Something went wrong")
             setLoading(false)
         }
     }

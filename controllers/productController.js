@@ -3,8 +3,7 @@ import productModel from "../models/productModel.js"
 import fs from "fs"
 
 export const createProduct = async (req, res) => {
-    const { name, description, price, category, quantity } = req.fields
-    const { photo } = req.files
+    const { name, description, price, category, quantity, photoName } = req.body
     if (!name) {
         return res.status(400).json({ message: "Please enter product name!" })
     }
@@ -20,17 +19,13 @@ export const createProduct = async (req, res) => {
     if (!quantity) {
         return res.status(400).json({ message: "Please enter product quantity!" })
     }
-    if (!photo | photo.size > 1048576) {
-        return res.status(400).json({ message: "Photo is required and must not be more than 1 MB!", size: photo.size })
+    if (!photoName) {
+        return res.status(400).json({ message: "Photo is required !" })
     }
     try {
-        const product = new productModel({ ...req.fields, slug: slugify(name) })
-        if (photo) {
-            product.photo.data = fs.readFileSync(photo.path)
-            product.photo.contentType = photo.type
-        }
+        const product = new productModel({ ...req.body, slug: slugify(name) })
+
         await product.save()
-        console.log(product);
         res.status(201).json({
             success: true,
             message: "Product created successfully!",
@@ -47,7 +42,7 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await productModel.find().select("-photo").limit(10).sort({ createdAt: -1 })
+        const products = await productModel.find().limit(10).sort({ createdAt: -1 })
             .populate("category")
         res.status(200).json({
             success: true,

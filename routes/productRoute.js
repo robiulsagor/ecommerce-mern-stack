@@ -1,12 +1,12 @@
 import express from "express"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
 import { createProduct, deleteProduct, getProductPhoto, getProducts, getSingleProduct, updateProduct } from "../controllers/productController.js"
-import formidable from "express-formidable"
+// import formidable from "express-formidable"
 
 const router = express.Router()
 
 // create product
-router.post("/create-product", requireSignIn, isAdmin, formidable(), createProduct)
+router.post("/create-product", requireSignIn, isAdmin, createProduct)
 
 // get all products
 router.get("/get-product", getProducts)
@@ -21,6 +21,6 @@ router.get("/get-product-photo/:id", getProductPhoto)
 router.delete("/delete-product/:id", requireSignIn, isAdmin, deleteProduct)
 
 // update product
-router.put("/update-product/:id", requireSignIn, isAdmin, formidable(), updateProduct)
+router.put("/update-product/:id", requireSignIn, isAdmin, updateProduct)
 
 export default router

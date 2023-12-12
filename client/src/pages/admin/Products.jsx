@@ -5,6 +5,8 @@ import toast from 'react-hot-toast'
 import axios from 'axios'
 import Loading from '../../components/Loading'
 import { Link } from 'react-router-dom'
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from '../../firebase'
 
 const Products = () => {
     const [products, setProducts] = useState([])
@@ -19,7 +21,6 @@ const Products = () => {
             })
             if (data?.productCoutnt > 0) {
                 setProducts(data.products)
-
             } else {
                 toast.error("No products found!")
                 setError("No products found!")
@@ -35,6 +36,7 @@ const Products = () => {
     useEffect(() => {
         getAllProducts()
     }, [])
+
 
     return (
         <Layout title={"Create Product - eCommerce App"}>
@@ -52,9 +54,11 @@ const Products = () => {
                                 {loading ? <Loading /> : products.map(product => (
                                     <Link to={`/admin/product/${product._id}`} key={product._id} className='product-link-admin'>
                                         <div className='card  p-3 product-card-admin'>
-                                            {!loading && <img src={`/api/product/get-product-photo/${product._id}`} alt="Product Image"
+
+                                            {!loading && <img src={product.photoName} alt="Product Image"
                                                 className='mx-auto img-fluid' />
                                             }
+
                                             <h4>{product.name} </h4>
                                             <div className="row">
                                                 <div className="col"> ${product.price} </div>
