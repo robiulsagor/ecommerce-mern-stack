@@ -9,8 +9,10 @@ import axios from 'axios';
 import Loading from '../../components/Loading'
 import { storage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useNavigate } from 'react-router-dom';
 
 const CreateProduct = () => {
+    const navigate = useNavigate()
     const [categories, setCategories] = useState([])
     const [category, setCategory] = useState("")
     const [name, setName] = useState("")
@@ -97,15 +99,16 @@ const CreateProduct = () => {
                 }
             )
             toast.success("Product added!")
+            navigate("/admin/products")
 
-            setCategory("")
-            setName("")
-            setDescription("")
-            setPrice("")
-            setQuantity("")
-            setPhoto("")
-            setShipping(0)
-            setLoading(false)
+            // setCategory("")
+            // setName("")
+            // setDescription("")
+            // setPrice("")
+            // setQuantity("")
+            // setPhoto("")
+            // setShipping(0)
+            // setLoading(false)
 
         } catch (error) {
             console.log(error.response.data || "Error");

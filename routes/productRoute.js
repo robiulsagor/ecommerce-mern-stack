@@ -1,7 +1,6 @@
 import express from "express"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
-import { createProduct, deleteProduct, getProductPhoto, getProducts, getSingleProduct, updateProduct } from "../controllers/productController.js"
-// import formidable from "express-formidable"
+import { createProduct, deleteProduct, filterProduct, getProductPhoto, getProducts, getSingleProduct, updateProduct } from "../controllers/productController.js"
 
 const router = express.Router()
 
@@ -22,5 +21,8 @@ router.delete("/delete-product/:id", requireSignIn, isAdmin, deleteProduct)
 
 // update product
 router.put("/update-product/:id", requireSignIn, isAdmin, updateProduct)
+
+// filter product
+router.post("/filter-product", filterProduct)
 
 export default router

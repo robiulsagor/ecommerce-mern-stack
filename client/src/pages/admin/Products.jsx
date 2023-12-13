@@ -53,7 +53,7 @@ const Products = () => {
                             <div className='mt-3 product-grid-admin'>
                                 {loading ? <Loading /> : products.map(product => (
                                     <Link to={`/admin/product/${product._id}`} key={product._id} className='product-link-admin'>
-                                        <div className='card  p-3 product-card-admin'>
+                                        <div className='card  p-3 product-card'>
 
                                             {!loading && <img src={product.photoUrl} alt="Product Image"
                                                 className='mx-auto img-fluid' />

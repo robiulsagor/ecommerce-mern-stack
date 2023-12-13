@@ -150,16 +150,17 @@ const UpdateProduct = () => {
             })
             console.log(saved);
             toast.success("Product updated!")
+            navigate("/admin/product")
 
-            setCategory("")
-            setName("")
-            setDescription("")
-            setPrice("")
-            setQuantity("")
-            setPhotoName(null)
-            setPhotoSelected(null)
-            setShipping(0)
-            setLoading(false)
+            // setCategory("")
+            // setName("")
+            // setDescription("")
+            // setPrice("")
+            // setQuantity("")
+            // setPhotoName(null)
+            // setPhotoSelected(null)
+            // setShipping(0)
+            // setLoading(false)
 
         } catch (error) {
             console.log(error);

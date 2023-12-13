@@ -133,7 +133,6 @@ export const updateProduct = async (req, res) => {
         const product = await productModel.findByIdAndUpdate(req.params.id,
             { ...req.body, slug: slugify(name) }, { new: true })
 
-
         // await product.save()
         res.status(200).json({
             success: true,
@@ -145,6 +144,27 @@ export const updateProduct = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Something went wrong!"
+        })
+    }
+}
+
+export const filterProduct = async (req, res) => {
+    try {
+        const { checked, radio } = req.body
+        let args = {}
+        if (checked.length) args.category = checked
+        if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] }
+        const products = await productModel.find(args)
+        res.status(200).json({
+            success: true,
+            products
+        })
+        console.log(checked, radio);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Error while filtering products!"
         })
     }
 }
