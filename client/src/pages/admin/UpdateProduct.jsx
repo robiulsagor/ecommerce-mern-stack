@@ -150,18 +150,7 @@ const UpdateProduct = () => {
             })
             console.log(saved);
             toast.success("Product updated!")
-            navigate("/admin/product")
-
-            // setCategory("")
-            // setName("")
-            // setDescription("")
-            // setPrice("")
-            // setQuantity("")
-            // setPhotoName(null)
-            // setPhotoSelected(null)
-            // setShipping(0)
-            // setLoading(false)
-
+            navigate("/admin/products")
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong")

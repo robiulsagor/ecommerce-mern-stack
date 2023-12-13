@@ -100,11 +100,10 @@ const Home = () => {
                         <div className='mt-5'>
                             <h4>Filter by Price</h4>
 
-                            <div className='mt-3'>
-                                <Radio.Group onChange={e => setRadio(e.target.value)}>
-
+                            <div className='mt-3 d-flex flex-col'>
+                                <Radio.Group onChange={e => setRadio(e.target.value)} className='d-block'>
                                     {priceFilter?.map(p => (
-                                        <Radio key={p._id} value={p.value}>{p.name} </Radio>
+                                        <Radio key={p._id} value={p.value} className='d-block'>{p.name} </Radio>
                                     ))}
                                 </Radio.Group>
                             </div>
@@ -120,8 +119,7 @@ const Home = () => {
                                         className='mx-auto img-fluid' style={{ width: "200px" }} />
 
                                     <h5>{product.name} </h5>
-                                    <p>{product.description.substring(0, 20)} </p>
-
+                                    <p>{product.description.substring(0, 30)}... </p>
 
                                     <p><b> ${product.price} </b></p>
 
