@@ -1,6 +1,7 @@
 import slugify from "slugify"
 import productModel from "../models/productModel.js"
 import fs from "fs"
+import { log } from "console"
 
 export const createProduct = async (req, res) => {
     const { name, description, price, category, quantity, photoName } = req.body
@@ -165,6 +166,43 @@ export const filterProduct = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error while filtering products!"
+        })
+    }
+}
+
+export const productCount = async (req, res) => {
+    try {
+        const total = await productModel.find().estimatedDocumentCount()
+        console.log(total);
+        res.status(200).json({
+            success: true,
+            total
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            error
+        })
+    }
+}
+
+export const paginate = async (req, res) => {
+    try {
+        const perPage = 3
+        const page = req.params.page ? req.params.page : 1
+        console.log(page);
+        const moreProducts = await productModel.find().skip((page - 1) * perPage).limit(perPage).sort({ createdAt: -1 })
+        res.json({
+            success: true,
+            products: moreProducts
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            error
         })
     }
 }

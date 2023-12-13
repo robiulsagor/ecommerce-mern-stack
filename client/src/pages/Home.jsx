@@ -10,8 +10,11 @@ const Home = () => {
     const [categories, setCategories] = useState([])
     const [checked, setChecked] = useState([])
     const [radio, setRadio] = useState([])
+    const [errText, setErrText] = useState("")
 
-    console.log(checked);
+    const [total, setTotal] = useState(0)
+    const [page, setPage] = useState(1)
+    const [loading, setLoading] = useState(false)
 
     const getAllCategories = async () => {
         try {
@@ -33,21 +36,65 @@ const Home = () => {
     }, [])
 
     const getAllProducts = async () => {
+        setLoading(true)
         try {
-            const data = await axios.get("/api/product/get-product")
+
+            const data = await axios.get(`/api/product/paginate/${page}`)
             if (data?.data?.products) {
                 setProducts(data?.data?.products)
             } else {
                 toast.error("No products found!")
             }
+            setLoading(false)
+            console.log(data);
         } catch (error) {
             console.log(error);
             toast.error(error.response.message || "Loading Error")
+            setLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (page === 1) return
+        loadMore()
+    }, [page])
+
+    const loadMore = async () => {
+        setLoading(true)
+        try {
+            const { data } = await axios.get(`/api/product/paginate/${page}`)
+            if (data?.products) {
+                setProducts(data?.data?.products)
+                setProducts([...products, ...data?.products])
+            } else {
+                toast.error("No products found!")
+            }
+            setLoading(false)
+            setLoading(false)
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.message || "Loading Error")
+            setLoading(false)
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
         getAllProducts()
+        getProductCount()
     }, [])
+
+    // for pagination, get the total product length
+    const getProductCount = async () => {
+        try {
+            const { data } = await axios.get("/api/product/product-count")
+            console.log(data);
+            setTotal(data?.total)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // filter options
     const handleCheckFilter = (val, id) => {
@@ -67,8 +114,10 @@ const Home = () => {
                 const { data } = await axios.post("/api/product/filter-product", { checked, radio })
                 if (data?.products.length > 0) {
                     setProducts(data?.products)
+                    setErrText("")
                 } else {
                     toast.error("No products found!")
+                    setErrText("No products found!")
                     setProducts(data?.products)
                 }
             } catch (error) {
@@ -83,7 +132,7 @@ const Home = () => {
         <Layout title="Home - eCommerce App">
             <div className="container-fluid py-5">
                 <div className="row">
-                    <div className="col-3 border ps-4">
+                    <div className="col-3  px-4">
                         <div>
                             <h4>Filter by Category</h4>
                             <div className='mt-3 '>
@@ -108,10 +157,19 @@ const Home = () => {
                                 </Radio.Group>
                             </div>
                         </div>
+                        <div className="d-flex flex-column">
+                            <button className='btn btn-danger mt-4 py-2 fw-bold' onClick={() => window.location.reload()}>RESET FILTERS</button>
+                        </div>
                     </div>
                     <div className="col">
-                        <h3>All Products</h3>
+                        <h3 className='text-center'>All Products</h3>
+                        {
+                            products.length == 0 && errText && <div className='w-full d-flex flex-column align-items-center justify-content-center' style={{ height: "30vh" }}>
+                                <h2 className='text-center text-danger'>{errText} </h2>
+                            </div>
+                        }
                         <div className='d-flex flex-wrap mt-4'>
+
                             {products?.map((product, i) => {
                                 return <div key={i} className='card  p-3 product-card m-2'>
 
@@ -134,6 +192,12 @@ const Home = () => {
                                 </div>
                             })}
                         </div>
+
+                        {products && products.length < total && (
+                            <button className='btn btn-warning' onClick={() => setPage(page + 1)}>
+                                {loading ? "Loading..." : "Load More"}
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

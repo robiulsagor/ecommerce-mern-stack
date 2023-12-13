@@ -1,6 +1,6 @@
 import express from "express"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
-import { createProduct, deleteProduct, filterProduct, getProductPhoto, getProducts, getSingleProduct, updateProduct } from "../controllers/productController.js"
+import { createProduct, deleteProduct, filterProduct, getProductPhoto, getProducts, getSingleProduct, paginate, productCount, updateProduct } from "../controllers/productController.js"
 
 const router = express.Router()
 
@@ -24,5 +24,11 @@ router.put("/update-product/:id", requireSignIn, isAdmin, updateProduct)
 
 // filter product
 router.post("/filter-product", filterProduct)
+
+// product count
+router.get("/product-count", productCount)
+
+// paginate
+router.get("/paginate/:page", paginate)
 
 export default router
