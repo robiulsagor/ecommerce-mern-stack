@@ -19,6 +19,7 @@ const CreateProduct = () => {
     const [quantity, setQuantity] = useState("")
     const [photo, setPhoto] = useState(null)
     const [photoName, setPhotoName] = useState(null)
+    const [photoUrl, setPhotoUrl] = useState(null)
     const [shipping, setShipping] = useState(0)
 
     const [loading, setLoading] = useState(false)
@@ -70,10 +71,9 @@ const CreateProduct = () => {
                 },
                 () => {
                     toast.success("File uploaded successfully!")
-                    console.log(fileName);
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        console.log('File available at', downloadURL);
-                        setPhotoName(downloadURL)
+                        setPhotoName(fileName)
+                        setPhotoUrl(downloadURL)
                     });
                 }
             );
@@ -81,7 +81,6 @@ const CreateProduct = () => {
         }
         photo && uploadPhoto()
     }, [photo])
-    console.log(photoName);
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -94,10 +93,9 @@ const CreateProduct = () => {
         try {
             const saved = await axios.post("/api/product/create-product",
                 {
-                    name, description, price, category, quantity, photoName, shipping
+                    name, description, price, category, quantity, photoName, photoUrl, shipping
                 }
             )
-            console.log(saved);
             toast.success("Product added!")
 
             setCategory("")

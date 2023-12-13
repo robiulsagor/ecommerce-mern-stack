@@ -28,6 +28,9 @@ const productModel = new mongoose.Schema({
     photoName: {
         type: String,
     },
+    photoUrl: {
+        type: String,
+    },
     shipping: {
         type: Boolean
     }

@@ -55,7 +55,7 @@ const Products = () => {
                                     <Link to={`/admin/product/${product._id}`} key={product._id} className='product-link-admin'>
                                         <div className='card  p-3 product-card-admin'>
 
-                                            {!loading && <img src={product.photoName} alt="Product Image"
+                                            {!loading && <img src={product.photoUrl} alt="Product Image"
                                                 className='mx-auto img-fluid' />
                                             }
 

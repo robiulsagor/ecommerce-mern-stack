@@ -110,8 +110,8 @@ export const deleteProduct = async (req, res) => {
 }
 
 export const updateProduct = async (req, res) => {
-    const { name, description, price, category, quantity } = req.fields
-    const { photo } = req.files
+    console.log(req.body);
+    const { name, description, price, category, quantity, photoName, photoUrl } = req.body
 
     if (!name) {
         return res.status(400).json({ message: "Please enter product name!" })
@@ -128,18 +128,13 @@ export const updateProduct = async (req, res) => {
     if (!quantity) {
         return res.status(400).json({ message: "Please enter product quantity!" })
     }
-    if ((photo && photo?.size) > 1048576) {
-        return res.status(400).json({ message: "Photo is required and must not be more than 1 MB!" })
-    }
+
     try {
         const product = await productModel.findByIdAndUpdate(req.params.id,
-            { ...req.fields, slug: slugify(name) }, { new: true })
+            { ...req.body, slug: slugify(name) }, { new: true })
 
-        if (photo) {
-            product.photo.data = fs.readFileSync(photo.path);
-            product.photo.contentType = photo.type;
-        }
-        await product.save()
+
+        // await product.save()
         res.status(200).json({
             success: true,
             message: "Product updated successfully!",

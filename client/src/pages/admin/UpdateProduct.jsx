@@ -6,6 +6,8 @@ import toast from 'react-hot-toast'
 import { Modal, Select } from 'antd'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
+import { storage } from '../../firebase'
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 
 const UpdateProduct = () => {
     const params = useParams()
@@ -19,8 +21,10 @@ const UpdateProduct = () => {
     const [description, setDescription] = useState("")
     const [price, setPrice] = useState("")
     const [quantity, setQuantity] = useState("")
-    const [photo, setPhoto] = useState()
     const [shipping, setShipping] = useState(0)
+    const [photoSelected, setPhotoSelected] = useState(null)
+    const [photoName, setPhotoName] = useState(null)
+    const [photoUrl, setPhotoUrl] = useState(null)
 
     const [id, setId] = useState('')
 
@@ -60,7 +64,7 @@ const UpdateProduct = () => {
             const { data } = await axios.get(`/api/product/get-product/${params.id}`)
             if (data.success) {
                 const { product } = data
-                console.log(product);
+
                 setId(product._id)
                 setName(product.name)
                 setCategory(product.category._id)
@@ -68,9 +72,11 @@ const UpdateProduct = () => {
                 setQuantity(product.quantity)
                 setPrice(product.price)
                 setShipping(product.shipping)
+                setPhotoName(product.photoName)
+                setPhotoUrl(product.photoUrl)
             }
         } catch (error) {
-            toast.error("Error")
+            toast.error("Error, ", error)
         }
     }
 
@@ -78,6 +84,47 @@ const UpdateProduct = () => {
         getProduct()
         getAllCategories()
     }, [])
+
+    // upload photo
+    useEffect(() => {
+        const uploadPhoto = () => {
+            const randomName = Date.now()
+            const fileName = randomName + "-" + photoSelected.name
+            const storageRef = ref(storage, `images/${fileName}`)
+            const uploadTask = uploadBytesResumable(storageRef, photoSelected);
+
+            // delete previous image
+            const deleteRef = ref(storage, `images/${photoName}`)
+
+            deleteObject(deleteRef).then(() => {
+                console.log("Deleted previous image");
+                setPhotoName(null)
+            })
+                .catch(err => console.log("err deleting previous image, ", err))
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                },
+                (error) => {
+                    toast.error("File upload unsuccessful")
+                },
+                () => {
+                    toast.success("File uploaded successfully!")
+                    console.log(fileName);
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        setPhotoName(fileName)
+                        setPhotoUrl(downloadURL)
+                    });
+                }
+            );
+
+        }
+        photoSelected && uploadPhoto()
+    }, [photoSelected])
+
 
     const handleUpdate = async e => {
         e.preventDefault()
@@ -93,12 +140,14 @@ const UpdateProduct = () => {
         product.append("category", category)
         product.append("price", price)
         product.append("quantity", quantity)
-        photo && product.append("photo", photo)
+        photoName && product.append("photoName", photoName)
         product.append("shipping", shipping)
 
         setLoading(true)
         try {
-            const saved = await axios.put(`/api/product/update-product/${params.id}`, product)
+            const saved = await axios.put(`/api/product/update-product/${params.id}`, {
+                name, category, description, price, quantity, photoName, photoUrl, shipping
+            })
             console.log(saved);
             toast.success("Product updated!")
 
@@ -107,7 +156,8 @@ const UpdateProduct = () => {
             setDescription("")
             setPrice("")
             setQuantity("")
-            setPhoto("")
+            setPhotoName(null)
+            setPhotoSelected(null)
             setShipping(0)
             setLoading(false)
 
@@ -126,7 +176,15 @@ const UpdateProduct = () => {
 
     const handleDelete = async () => {
         setDeleting(true)
+
         try {
+            // delete  image
+            const deleteRef = ref(storage, `images/${photoName}`)
+            deleteObject(deleteRef).then(() => {
+                console.log("Deleted previous image");
+                setPhotoName(null)
+            }).catch(err => console.log("err deleting previous image, ", err))
+
             await axios.delete(`/api/product/delete-product/${params.id}`)
             toast.success("Product deleted successfully!")
             setIsModalOpen(false);
@@ -144,6 +202,8 @@ const UpdateProduct = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
+
 
     return (
         <Layout title={"Update Product - eCommerce App"}>
@@ -178,42 +238,34 @@ const UpdateProduct = () => {
                                         className='mb-3'
                                     />
 
-                                    {/* <label htmlFor="productImg" className='form-control form-label mb-3'>
-                                        {photo ? photo.name : " Select an Image"}
-                                    </label>
-
-                                    <input type="file" name="photo" className='form-control mb-3' id='productImg'
-                                        onChange={e => setPhoto(e.target.files[0])} hidden /> */}
-
                                     <div className="mb-3">
                                         <label className="btn btn-outline-secondary col-md-12">
-                                            {photo ? photo.name : "Upload Photo"}
+                                            {photoName ? "Update Photo" : photoSelected ? photoSelected.name : "Upload a photo..."}
                                             <input
                                                 type="file"
                                                 name="photo"
                                                 accept="image/*"
-                                                onChange={(e) => setPhoto(e.target.files[0])}
+                                                onChange={(e) => { setPhotoSelected(e.target.files[0]); }}
                                                 hidden
                                             />
                                         </label>
                                     </div>
 
-                                    {photo ? (
+                                    {photoUrl ? (
                                         <>
                                             <div className='photo-cancel-container' style={{ position: "relative" }}>
-                                                <button type='button' onClick={() => setPhoto(null)}
+                                                <button type='button' onClick={() => setPhotoName(null)}
                                                     className='btn btn-danger photo-cancel-btn'>&times; </button>
                                             </div>
                                             <label htmlFor="productImg" >
-                                                <img src={URL.createObjectURL(photo)} className='img-fluid mb-3' alt="" />
+                                                <img src={photoUrl} className='img-fluid mb-3' alt="" />
                                             </label>
                                         </>
                                     )
-                                        :
-                                        <img src={`/api/product/get-product-photo/${id}`} className='img-fluid mb-3' alt="" />
+                                        : photoSelected &&
+                                        <img src={URL.createObjectURL(photoSelected)} className='img-fluid mb-3' alt="" />
                                     }
 
-                                    {/* {photo && <img src={`/api/product/get-product-photo/${id}`} className='img-fluid mb-3' alt="" />} */}
 
                                     <input type="text" className='form-control mb-3' placeholder='Product name'
                                         value={name} onChange={e => setName(e.target.value)} />
