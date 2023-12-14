@@ -41,6 +41,7 @@ import Products from './pages/admin/Products.jsx';
 import UpdateProduct from './pages/admin/UpdateProduct.jsx';
 import { SearchContext, SearchProvider } from './context/searchContext.jsx';
 import SearchPage from './pages/SearchPage.jsx';
+import ProductDetails from './pages/ProductDetails.jsx';
 
 
 
@@ -52,6 +53,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Toaster position='top-right' />
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='/product/:slug' element={<ProductDetails />} />
             <Route path='/search' element={<SearchPage />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />

@@ -1,6 +1,6 @@
 import express from "express"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
-import { createProduct, deleteProduct, filterProduct, getProductPhoto, getProducts, getSingleProduct, paginate, productCount, search, updateProduct } from "../controllers/productController.js"
+import { createProduct, deleteProduct, filterProduct, getProducts, getSingleProduct, getSingleProductBySlug, paginate, productCount, search, updateProduct } from "../controllers/productController.js"
 
 const router = express.Router()
 
@@ -10,11 +10,11 @@ router.post("/create-product", requireSignIn, isAdmin, createProduct)
 // get all products
 router.get("/get-product", getProducts)
 
-// get single product
+// get single product by id
 router.get("/get-product/:id", getSingleProduct)
 
-// get product photo
-router.get("/get-product-photo/:id", getProductPhoto)
+// get single product by slug
+router.get("/get-product/:slug", getSingleProductBySlug)
 
 // delete product 
 router.delete("/delete-product/:id", requireSignIn, isAdmin, deleteProduct)

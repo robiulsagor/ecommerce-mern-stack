@@ -78,13 +78,15 @@ export const getSingleProduct = async (req, res) => {
     }
 }
 
-export const getProductPhoto = async (req, res) => {
+export const getSingleProductBySlug = async (req, res) => {
+    const { slug } = req.params
     try {
-        const product = await productModel.findById(req.params.id).select("photo")
-        if (product.photo.data) {
-            res.set('Content-Type', product.photo.contentType)
-            return res.send(product.photo.data)
-        }
+        const product = await productModel.findOne({ slug }).populate("category")
+        res.status(200).json({
+            success: true,
+            message: "Product fetched!",
+            product
+        })
     } catch (error) {
         console.log(error);
         return res.status(500).json({

@@ -6,8 +6,10 @@ import { Checkbox, Radio } from 'antd';
 import { priceFilter } from '../utils/priceFilters';
 import Spinner from '../components/Spinner';
 import SmallSpinner from '../components/SmallSpinner';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+    const navigate = useNavigate()
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
     const [checked, setChecked] = useState([])
@@ -192,7 +194,7 @@ const Home = () => {
 
                                     <div className="row">
                                         <div className="col">
-                                            <button className='btn btn-secondary'>More Details</button>
+                                            <button className='btn btn-secondary' onClick={() => navigate(`/product/${product.slug}`)}>More Details</button>
                                         </div>
                                         <div className="col">
                                             <button className='btn btn-primary'>Add to Cart</button>
