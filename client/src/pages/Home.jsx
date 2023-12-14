@@ -4,6 +4,8 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { Checkbox, Radio } from 'antd';
 import { priceFilter } from '../utils/priceFilters';
+import Spinner from '../components/Spinner';
+import SmallSpinner from '../components/SmallSpinner';
 
 const Home = () => {
     const [products, setProducts] = useState([])
@@ -15,6 +17,8 @@ const Home = () => {
     const [total, setTotal] = useState(0)
     const [page, setPage] = useState(1)
     const [loading, setLoading] = useState(false)
+    const [productsLoading, setProductsLoading] = useState(false)
+
 
     const getAllCategories = async () => {
         try {
@@ -36,23 +40,29 @@ const Home = () => {
     }, [])
 
     const getAllProducts = async () => {
-        setLoading(true)
+        setProductsLoading(true)
         try {
 
-            const data = await axios.get(`/api/product/paginate/${page}`)
+            const data = await axios.get(`/api/product/paginate/${page}`, {
+                signal: AbortSignal.timeout(4000)
+            })
             if (data?.data?.products) {
                 setProducts(data?.data?.products)
             } else {
                 toast.error("No products found!")
+                setErrText("No products found!")
             }
-            setLoading(false)
+            setProductsLoading(false)
+
             console.log(data);
         } catch (error) {
             console.log(error);
-            toast.error(error.response.message || "Loading Error")
-            setLoading(false)
+            toast.error("Loading Error")
+            setErrText("Loading Error")
+            setProductsLoading(false)
         }
     }
+    console.log(errText);
 
     useEffect(() => {
         if (page === 1) return
@@ -70,12 +80,9 @@ const Home = () => {
                 toast.error("No products found!")
             }
             setLoading(false)
-            setLoading(false)
-            console.log(data);
         } catch (error) {
             console.log(error);
             toast.error(error.response.message || "Loading Error")
-            setLoading(false)
             setLoading(false)
         }
     }
@@ -163,18 +170,20 @@ const Home = () => {
                     </div>
                     <div className="col">
                         <h3 className='text-center'>All Products</h3>
+                        {productsLoading && <Spinner />}
                         {
                             products.length == 0 && errText && <div className='w-full d-flex flex-column align-items-center justify-content-center' style={{ height: "30vh" }}>
                                 <h2 className='text-center text-danger'>{errText} </h2>
                             </div>
                         }
+
                         <div className='d-flex flex-wrap mt-4'>
 
                             {products?.map((product, i) => {
                                 return <div key={i} className='card  p-3 product-card m-2'>
 
                                     <img src={product.photoUrl} alt="Product Image"
-                                        className='mx-auto img-fluid' style={{ width: "200px" }} />
+                                        className='mx-auto img-fluid mb-3' style={{ width: "200px" }} />
 
                                     <h5>{product.name} </h5>
                                     <p>{product.description.substring(0, 30)}... </p>
@@ -194,8 +203,8 @@ const Home = () => {
                         </div>
 
                         {products && products.length < total && (
-                            <button className='btn btn-warning' onClick={() => setPage(page + 1)}>
-                                {loading ? "Loading..." : "Load More"}
+                            <button className='btn btn-warning mt-4' onClick={() => setPage(page + 1)}>
+                                {loading ? <SmallSpinner /> : "Load More"}
                             </button>
                         )}
                     </div>

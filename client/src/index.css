@@ -38,6 +38,7 @@ h1.normal, h2.normal, h3.normal, h4.normal {
     font-weight: 700;
     font-family: 'Roboto', sans-serif;
     letter-spacing: 3px;
+    justify-content: space-around;
 }
 
 .nav-item a {
