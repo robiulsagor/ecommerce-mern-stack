@@ -44,6 +44,7 @@ import SearchPage from './pages/SearchPage.jsx';
 import ProductDetails from './pages/ProductDetails.jsx';
 import Categories from './pages/Categories.jsx';
 import CategoryProduct from './pages/CategoryProduct.jsx';
+import Cart from './pages/Cart.jsx';
 
 
 
@@ -59,6 +60,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path='/search' element={<SearchPage />} />
             <Route path='/category' element={<Categories />} />
             <Route path='/category/:slug' element={<CategoryProduct />} />
+            <Route path='/cart' element={<Cart />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />

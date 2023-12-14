@@ -8,8 +8,11 @@ import Spinner from '../components/Spinner';
 import SmallSpinner from '../components/SmallSpinner';
 import { useNavigate } from 'react-router-dom';
 
+
 const Home = () => {
     const navigate = useNavigate()
+
+
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
     const [checked, setChecked] = useState([])
