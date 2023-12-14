@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '../components/layout/Layout'
 import { useAuth } from '../redux/authSlice'
 import { clearCart, decreaseQuantity, increaseQuantity, removeItem, useCart } from '../redux/cartSlice'
@@ -9,8 +9,19 @@ import toast from 'react-hot-toast'
 const Cart = () => {
     const auth = useAuth()
     const { cart } = useCart()
+    const [total, setTotal] = useState()
     console.log(cart);
     const dispatch = useDispatch()
+
+    const getTotal = cart?.reduce((total, item) => {
+        total += item.quantity * item.price
+        return total
+    }, 0)?.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+    })
+
+    console.log('Subtotal:', getTotal);
 
     return (
         <Layout title={"Cart- Ecommerce App"}>
@@ -23,39 +34,48 @@ const Cart = () => {
                         }
                     </h6>
 
-                    <div className="col-7">
-                        {cart?.length >= 1 && cart?.map((c, i) => (
-                            <div className="row border flex-row mb-2 py-4" key={i}>
-                                <div className="col-4">
-                                    <img src={`${c.photoUrl}`} alt="img" style={{ width: '180px' }} />
-                                </div>
-                                <div className="col-6 " >
-                                    <p> {c.name} </p>
-                                    <p> {c.description} </p>
-                                    <p> ${c.price} </p>
-                                    <div className='mb-2'>
-                                        <span className="border  me-2 btn btn-secondary-outline"
-                                            onClick={() => { dispatch(increaseQuantity(c)) }}>+</span>
-                                        {c.quantity}
-                                        <span className="border  ms-2 btn btn-secondary-outline"
-                                            onClick={() => { dispatch(decreaseQuantity(c)) }}>-</span>
+                    {cart?.length >= 1 && (
+                        <>
 
-                                        <span className='ms-4'>Total: ${c.price * c.quantity} </span>
+                            <div className="col-7">
+                                {cart?.map((c, i) => (
+                                    <div className="row border flex-row mb-2 py-4" key={i}>
+                                        <div className="col-4">
+                                            <img src={`${c.photoUrl}`} alt="img" style={{ width: '180px' }} />
+                                        </div>
+                                        <div className="col-6 " >
+                                            <p> {c.name} </p>
+                                            <p> {c.description} </p>
+                                            <p> ${c.price} </p>
+                                            <div className='mb-2'>
+                                                <span className="border  me-2 btn btn-secondary-outline"
+                                                    onClick={() => { dispatch(increaseQuantity(c)) }}>+</span>
+                                                {c.quantity}
+                                                <span className="border  ms-2 btn btn-secondary-outline"
+                                                    onClick={() => { dispatch(decreaseQuantity(c)) }}>-</span>
+
+                                                <span className='ms-4'>Total: ${c.price * c.quantity} </span>
+                                            </div>
+
+                                            <button className="btn btn-danger" onClick={() => { dispatch(removeItem(c)); toast.success("Product removed from cart!") }}>Remove</button>
+                                        </div>
+
                                     </div>
-
-                                    <button className="btn btn-danger" onClick={() => { dispatch(removeItem(c)); toast.success("Product removed from cart!") }}>Remove</button>
+                                ))}
+                                {cart?.length >= 1 && <div className=' text-center'>
+                                    <button className='btn btn-danger mt-3 w-50'
+                                        onClick={() => { dispatch(clearCart()); toast.success("Cart has been cleared!") }}>CLEAR CART</button>
                                 </div>
+                                }
 
                             </div>
-                        ))}
-                        {cart?.length >= 1 && <div className=' text-center'>
-                            <button className='btn btn-danger mt-3 w-50'
-                                onClick={() => { dispatch(clearCart()); toast.success("Cart has been cleared!") }}>CLEAR CART</button>
-                        </div>
-                        }
-
-                    </div>
-                    <div className="col-4">Cart</div>
+                            <div className="col-md-4 text-center">
+                                <h2>Cart Summary</h2>
+                                <hr />
+                                <h4>Total: {getTotal} </h4>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </Layout>
