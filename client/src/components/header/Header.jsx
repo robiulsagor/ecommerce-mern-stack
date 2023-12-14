@@ -6,10 +6,13 @@ import { logout } from "../../redux/authSlice";
 import { useContext } from "react";
 import { SearchContext } from "../../context/searchContext";
 import SearchForm from "../form/SearchForm";
+import { useCategory } from "../../hooks/useCategory";
 
 const Header = () => {
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
+
+    const categories = useCategory()
 
     const logoutFunction = () => {
         dispatch(logout())
@@ -35,9 +38,26 @@ const Header = () => {
                             <li className="nav-item">
                                 <NavLink to='/' className="nav-link" >Home</NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink to='/category' className="nav-link">Category</NavLink>
+
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Category
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <NavLink to={`/category`} className="dropdown-item"> All Categories </NavLink>
+                                    <li><hr className="dropdown-divider" /></li>
+                                    {categories?.map((cat, i) => (
+                                        <li key={i}>
+                                            <NavLink to={`/category/${cat.slug}`} className="dropdown-item"> {cat.name} </NavLink>
+                                        </li>
+                                    ))}
+                                    {/* <li><a className="dropdown-item" href="#">Action</a></li>
+                                    <li><a className="dropdown-item" href="#">Another action</a></li>
+                                  
+                                    <li><a className="dropdown-item" href="#">Something else here</a></li> */}
+                                </ul>
                             </li>
+
 
                             {
                                 auth.user ? <>

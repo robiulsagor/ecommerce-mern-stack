@@ -17,6 +17,6 @@ router.delete("/delete-category/:id", requireSignIn, isAdmin, deleteCategory)
 router.get("/get-all-categories", getAllCategories)
 
 // show single category
-router.get("/single-category/:id", singleCategory)
+router.get("/single-category/:slug", singleCategory)
 
 export default router

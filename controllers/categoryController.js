@@ -90,9 +90,9 @@ export const getAllCategories = async (req, res) => {
 
 // show a single category
 export const singleCategory = async (req, res) => {
-    const { id } = req.params
+    const { slug } = req.params
     try {
-        const category = await categoryModel.findOne({ _id: id })
+        const category = await categoryModel.findOne({ slug })
         console.log(category);
         return res.status(200).json({
             success: true,
