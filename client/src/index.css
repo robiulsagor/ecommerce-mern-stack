@@ -260,3 +260,12 @@ h1.normal, h2.normal, h3.normal, h4.normal {
         grid-template-columns: 1fr;
     } */
 }
+
+.cart-action-btn{
+    width: 30px;
+    height: 30px;
+    line-height: 25px;
+    display: inline-block;
+    text-align: center;
+cursor: pointer;
+}

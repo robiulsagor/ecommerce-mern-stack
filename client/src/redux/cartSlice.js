@@ -10,26 +10,43 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addItem: (state, action) => {
-            // const findItem = state.cart.filter(p => p._id === action.payload._id)
+            const newItem = action.payload;
 
-            // if (findItem.length > 0) {
-            //     state.cart.push({ ...action.payload, quantity: 1 });
-            // } else {
-            state.cart.push({ ...action.payload, quantity: 1 });
-            // }
+            const existingItem = state.cart.find((item) => item._id === newItem._id);
 
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                state.cart.push({ ...newItem, quantity: 1 });
+            }
         },
         removeItem: (state, action) => {
-            let allItems = state.cart
-            let removed = action.payload
-
-            state.cart = [...state.cart]
+            const removedItemId = action.payload._id;
+            const newItems = state.cart.filter((item) => item._id !== removedItemId);
+            state.cart = newItems;
+        },
+        increaseQuantity: (state, action) => {
+            const newItem = action.payload;
+            const existingItem = state.cart.find((item) => item._id === newItem._id);
+            if (existingItem && existingItem.quantity < 9) {
+                existingItem.quantity += 1;
+            }
+        },
+        decreaseQuantity: (state, action) => {
+            const newItem = action.payload;
+            const existingItem = state.cart.find((item) => item._id === newItem._id);
+            if (existingItem && existingItem.quantity > 1) {
+                existingItem.quantity -= 1;
+            }
+        },
+        clearCart: state => {
+            state.cart = []
         }
     }
 })
 
 export const useCart = () => useSelector(state => state.cart)
 
-export const { addItem, removeItem } = cartSlice.actions
+export const { addItem, removeItem, increaseQuantity, decreaseQuantity, clearCart } = cartSlice.actions
 
 export default cartSlice.reducer

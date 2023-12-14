@@ -7,11 +7,14 @@ import { priceFilter } from '../utils/priceFilters';
 import Spinner from '../components/Spinner';
 import SmallSpinner from '../components/SmallSpinner';
 import { useNavigate } from 'react-router-dom';
-
+import { addItem, useCart } from '../redux/cartSlice';
+import { useDispatch } from 'react-redux';
 
 const Home = () => {
     const navigate = useNavigate()
-
+    const { cart } = useCart()
+    const dispatch = useDispatch()
+    console.log(cart);
 
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
@@ -190,7 +193,7 @@ const Home = () => {
                                             <button className='btn btn-secondary' onClick={() => navigate(`/product/${product.slug}`)}>More Details</button>
                                         </div>
                                         <div className="col">
-                                            <button className='btn btn-primary'>Add to Cart</button>
+                                            <button className='btn btn-primary' onClick={() => { dispatch(addItem(product)); toast.success("Product added to cart") }}>Add to Cart</button>
                                         </div>
                                     </div>
                                 </div>
