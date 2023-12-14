@@ -16,7 +16,6 @@ const SearchForm = () => {
             const { data } = await axios.get(`/api/product/search/${values.keyword}`, {
                 signal: AbortSignal.timeout(3000)
             })
-            console.log(data);
             setLoading(false)
             setValues({ ...values, result: data })
             navigate("/search")

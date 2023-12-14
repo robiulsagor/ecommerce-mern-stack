@@ -74,7 +74,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path='create-category' element={<CreateCategory />} />
               <Route path='create-product' element={<CreateProduct />} />
               <Route path='products' element={<Products />} />
-              <Route path='product/:id' element={<UpdateProduct />} />
+              <Route path='product/:slug' element={<UpdateProduct />} />
               <Route path='users' element={<Users />} />
               <Route path='secret' element={<SecretQuestions />} />
             </Route>

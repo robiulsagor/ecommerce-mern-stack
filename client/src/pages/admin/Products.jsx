@@ -52,14 +52,14 @@ const Products = () => {
                             {error && <h3 className='text-center text-danger'>{error}</h3>}
                             <div className='mt-3 product-grid-admin'>
                                 {loading ? <Loading /> : products.map(product => (
-                                    <Link to={`/admin/product/${product._id}`} key={product._id} className='product-link-admin'>
+                                    <Link to={`/admin/product/${product.slug}`} key={product._id} className='product-link-admin'>
                                         <div className='card  p-3 product-card'>
 
                                             {!loading && <img src={product.photoUrl} alt="Product Image"
                                                 className='mx-auto img-fluid' />
                                             }
 
-                                            <h4>{product.name} </h4>
+                                            <h5>{product.name} </h5>
                                             <div className="row">
                                                 <div className="col"> ${product.price} </div>
                                                 <div className="col">{product.price} </div>

@@ -179,19 +179,15 @@ const Home = () => {
                             </div>
                         }
 
-                        <div className='d-flex flex-wrap mt-4'>
-
+                        <div className='product-grid'>
                             {products?.map((product, i) => {
                                 return <div key={i} className='card  p-3 product-card m-2'>
-
                                     <img src={product.photoUrl} alt="Product Image"
                                         className='mx-auto img-fluid mb-3' style={{ width: "200px" }} />
 
                                     <h5>{product.name} </h5>
                                     <p>{product.description.substring(0, 30)}... </p>
-
                                     <p><b> ${product.price} </b></p>
-
                                     <div className="row">
                                         <div className="col">
                                             <button className='btn btn-secondary' onClick={() => navigate(`/product/${product.slug}`)}>More Details</button>

@@ -61,7 +61,7 @@ const UpdateProduct = () => {
 
     const getProduct = async () => {
         try {
-            const { data } = await axios.get(`/api/product/get-product/${params.id}`)
+            const { data } = await axios.get(`/api/product/get-product/${params.slug}`)
             if (data.success) {
                 const { product } = data
 
@@ -132,7 +132,6 @@ const UpdateProduct = () => {
             toast.error("All  field are required!")
             return;
         }
-        console.log(category);
 
         const product = new FormData()
         product.append("name", name)
@@ -145,10 +144,9 @@ const UpdateProduct = () => {
 
         setLoading(true)
         try {
-            const saved = await axios.put(`/api/product/update-product/${params.id}`, {
+            const saved = await axios.put(`/api/product/update-product/${params.slug}`, {
                 name, category, description, price, quantity, photoName, photoUrl, shipping
             })
-            console.log(saved);
             toast.success("Product updated!")
             navigate("/admin/products")
         } catch (error) {

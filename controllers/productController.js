@@ -61,24 +61,6 @@ export const getProducts = async (req, res) => {
 }
 
 export const getSingleProduct = async (req, res) => {
-    const { id } = req.params
-    try {
-        const product = await productModel.findById(id).populate("category")
-        res.status(200).json({
-            success: true,
-            message: "Product fetched!",
-            product
-        })
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: "Something went wrong!"
-        })
-    }
-}
-
-export const getSingleProductBySlug = async (req, res) => {
     const { slug } = req.params
     try {
         const product = await productModel.findOne({ slug }).populate("category")
@@ -114,6 +96,7 @@ export const deleteProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     console.log(req.body);
+    console.log(req.params);
     const { name, description, price, category, quantity, photoName, photoUrl } = req.body
 
     if (!name) {
@@ -133,7 +116,7 @@ export const updateProduct = async (req, res) => {
     }
 
     try {
-        const product = await productModel.findByIdAndUpdate(req.params.id,
+        const product = await productModel.findOneAndUpdate({ slug: req.params.slug },
             { ...req.body, slug: slugify(name) }, { new: true })
 
         // await product.save()
@@ -193,7 +176,6 @@ export const paginate = async (req, res) => {
     try {
         const perPage = 3
         const page = req.params.page ? req.params.page : 1
-        console.log(page);
         const moreProducts = await productModel.find().skip((page - 1) * perPage).limit(perPage).sort({ createdAt: -1 })
         res.json({
             success: true,
