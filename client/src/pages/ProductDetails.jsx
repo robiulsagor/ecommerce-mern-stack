@@ -7,12 +7,13 @@ import { useParams } from 'react-router-dom';
 const ProductDetails = () => {
     const params = useParams()
     const [product, setProduct] = useState({})
-    const [similar, setSimilar] = useState([])
+    const [similar, setSimilar] = useState()
 
     const getProduct = async () => {
         try {
             const { data } = await axios.get(`/api/product/get-product/${params.slug}`)
             setProduct(data?.product)
+            getSimilarProducts(data?.product.category._id, data?.product._id)
         } catch (error) {
             console.log(error);
             toast.error(error || "Error loading product!")
@@ -23,7 +24,17 @@ const ProductDetails = () => {
         if (params) getProduct()
     }, [])
 
-    console.log(product);
+    const getSimilarProducts = async (cid, pid) => {
+        try {
+            const { data } = await axios.get(`/api/product/similar-products/${cid}/${pid}`)
+            if (data.length > 0) {
+                setSimilar(data)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Error loading similar product!")
+        }
+    }
 
     return (
         <Layout title="Product detais- Ecomm app">
@@ -47,7 +58,27 @@ const ProductDetails = () => {
                 <hr />
                 <h6>Similar Products</h6>
                 <div className="col">
+                    {/* {similar?.length < 1} <h4>No products found {similar.length} </h4>
+                    {similar?.length > 0} <h4>products found {similar.length}</h4> */}
 
+                    <div className='product-grid'>
+                        {!similar && <h3>No products found</h3>}
+                        {similar?.map((product, i) => (
+                            <div key={i} className='card  p-3 product-card m-2'>
+                                <img src={product.photoUrl} alt="Product Image"
+                                    className='mx-auto img-fluid mb-3' style={{ width: "200px" }} />
+
+                                <h5>{product.name} </h5>
+                                <p>{product.description.substring(0, 30)}... </p>
+                                <p><b> ${product.price} </b></p>
+                                <div className="row">
+                                    <div className="col">
+                                        <button className='btn btn-primary'>Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </Layout>

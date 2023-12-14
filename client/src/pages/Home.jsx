@@ -44,7 +44,6 @@ const Home = () => {
     const getAllProducts = async () => {
         setProductsLoading(true)
         try {
-
             const data = await axios.get(`/api/product/paginate/${page}`, {
                 signal: AbortSignal.timeout(4000)
             })
@@ -55,8 +54,6 @@ const Home = () => {
                 setErrText("No products found!")
             }
             setProductsLoading(false)
-
-            console.log(data);
         } catch (error) {
             console.log(error);
             toast.error("Loading Error")
@@ -64,7 +61,6 @@ const Home = () => {
             setProductsLoading(false)
         }
     }
-    console.log(errText);
 
     useEffect(() => {
         if (page === 1) return
@@ -76,7 +72,6 @@ const Home = () => {
         try {
             const { data } = await axios.get(`/api/product/paginate/${page}`)
             if (data?.products) {
-                setProducts(data?.data?.products)
                 setProducts([...products, ...data?.products])
             } else {
                 toast.error("No products found!")
@@ -98,7 +93,6 @@ const Home = () => {
     const getProductCount = async () => {
         try {
             const { data } = await axios.get("/api/product/product-count")
-            console.log(data);
             setTotal(data?.total)
         } catch (error) {
             console.log(error);

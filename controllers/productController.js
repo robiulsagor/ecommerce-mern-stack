@@ -209,3 +209,23 @@ export const search = async (req, res) => {
         })
     }
 }
+
+export const getReletadProducts = async (req, res) => {
+    const { cid, pid } = req.params
+    console.log(req.params);
+    try {
+        const related = await productModel.find({
+            category: cid,
+            _id: { $ne: pid }
+        }).populate("category")
+        console.log(related);
+        res.json(related)
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            error
+        })
+    }
+}

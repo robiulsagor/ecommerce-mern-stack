@@ -1,6 +1,6 @@
 import express from "express"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
-import { createProduct, deleteProduct, filterProduct, getProducts, getSingleProduct, paginate, productCount, search, updateProduct } from "../controllers/productController.js"
+import { createProduct, deleteProduct, filterProduct, getProducts, getReletadProducts, getSingleProduct, paginate, productCount, search, updateProduct } from "../controllers/productController.js"
 
 const router = express.Router()
 
@@ -33,5 +33,8 @@ router.get("/paginate/:page", paginate)
 
 // search
 router.get("/search/:keyword", search)
+
+// get related products
+router.get("/similar-products/:cid/:pid", getReletadProducts)
 
 export default router
