@@ -217,7 +217,7 @@ export const getReletadProducts = async (req, res) => {
         const related = await productModel.find({
             category: cid,
             _id: { $ne: pid }
-        }).populate("category")
+        }).limit(3).populate("category")
         console.log(related);
         res.json(related)
 
