@@ -3,8 +3,6 @@ import { SiShopee } from "react-icons/si";
 import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux"
 import { logout } from "../../redux/authSlice";
-import { useContext } from "react";
-import { SearchContext } from "../../context/searchContext";
 import SearchForm from "../form/SearchForm";
 import { useCategory } from "../../hooks/useCategory";
 

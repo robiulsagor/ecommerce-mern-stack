@@ -14,8 +14,6 @@ const ProductDetails = () => {
         try {
             const { data } = await axios.get(`/api/product/get-product/${params.slug}`)
             setProduct(data?.product)
-            console.log(data?.product)
-            console.log("agaim");
             getSimilarProducts(data?.product.category._id, data?.product._id)
         } catch (error) {
             console.log(error);

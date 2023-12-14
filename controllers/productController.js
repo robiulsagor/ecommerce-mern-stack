@@ -2,6 +2,7 @@ import slugify from "slugify"
 import productModel from "../models/productModel.js"
 import fs from "fs"
 import { log } from "console"
+import categoryModel from "../models/categoryModel.js"
 
 export const createProduct = async (req, res) => {
     const { name, description, price, category, quantity, photoName } = req.body
@@ -221,6 +222,28 @@ export const getReletadProducts = async (req, res) => {
         console.log(related);
         res.json(related)
 
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            error
+        })
+    }
+}
+
+export const getProductsByCategory = async (req, res) => {
+    console.log(req.params);
+    const { slug } = req.params
+    try {
+        const category = await categoryModel.findOne({ slug })
+
+        const products = await productModel.find({ category: category._id })
+            .populate("category")
+        res.json({
+            success: true,
+            products,
+            category
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({

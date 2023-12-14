@@ -42,6 +42,8 @@ import UpdateProduct from './pages/admin/UpdateProduct.jsx';
 import { SearchContext, SearchProvider } from './context/searchContext.jsx';
 import SearchPage from './pages/SearchPage.jsx';
 import ProductDetails from './pages/ProductDetails.jsx';
+import Categories from './pages/Categories.jsx';
+import CategoryProduct from './pages/CategoryProduct.jsx';
 
 
 
@@ -55,6 +57,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path='/' element={<Home />} />
             <Route path='/product/:slug' element={<ProductDetails />} />
             <Route path='/search' element={<SearchPage />} />
+            <Route path='/category' element={<Categories />} />
+            <Route path='/category/:slug' element={<CategoryProduct />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />
