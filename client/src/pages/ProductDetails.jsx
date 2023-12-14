@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout/Layout'
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ProductDetails = () => {
     const params = useParams()
+    const navigate = useNavigate()
     const [product, setProduct] = useState({})
-    const [similar, setSimilar] = useState()
+    const [similar, setSimilar] = useState([])
 
     const getProduct = async () => {
         try {
             const { data } = await axios.get(`/api/product/get-product/${params.slug}`)
             setProduct(data?.product)
+            console.log(data?.product)
+            console.log("agaim");
             getSimilarProducts(data?.product.category._id, data?.product._id)
         } catch (error) {
             console.log(error);
@@ -23,6 +26,7 @@ const ProductDetails = () => {
     useEffect(() => {
         if (params) getProduct()
     }, [])
+
 
     const getSimilarProducts = async (cid, pid) => {
         try {
@@ -58,8 +62,8 @@ const ProductDetails = () => {
                 <hr />
                 <h6>Similar Products</h6>
                 <div className="col">
-                    {/* {similar?.length < 1} <h4>No products found {similar.length} </h4>
-                    {similar?.length > 0} <h4>products found {similar.length}</h4> */}
+
+                    {similar?.length < 1 && <h4 className='text-center text-danger'>No products found</h4>}
 
                     <div className='product-grid'>
                         {!similar && <h3>No products found</h3>}
@@ -72,6 +76,9 @@ const ProductDetails = () => {
                                 <p>{product.description.substring(0, 30)}... </p>
                                 <p><b> ${product.price} </b></p>
                                 <div className="row">
+                                    <div className="col">
+                                        <button className='btn btn-secondary' onClick={() => window.location.assign(`/product/${product.slug}`)}>More Details</button>
+                                    </div>
                                     <div className="col">
                                         <button className='btn btn-primary'>Add to Cart</button>
                                     </div>
