@@ -2,7 +2,7 @@ import userModel from "../models/userModel.js"
 import secretModel from "../models/secretModel.js";
 import { hashPassword, comparePassword, createJWT } from "../helper/authHelper.js"
 
-const registerController = async (req, res) => {
+export const registerController = async (req, res) => {
 
     try {
         const { name, email, password, phone, address, question, secret } = req.body
@@ -80,7 +80,7 @@ const registerController = async (req, res) => {
     }
 }
 
-const loginController = async (req, res) => {
+export const loginController = async (req, res) => {
     try {
         console.log(req.body);
         const email = req.body.email
@@ -132,7 +132,7 @@ const loginController = async (req, res) => {
 // part - 1
 // find user by email and find the 
 // secret question selected by user
-const findUser = async (req, res) => {
+export const findUser = async (req, res) => {
     const { email } = req.query
     if (!email) {
         return res.status(400).json({
@@ -167,7 +167,7 @@ const findUser = async (req, res) => {
 
 // part - 2
 // check the secret answer provided by the user
-const checkSecret = async (req, res) => {
+export const checkSecret = async (req, res) => {
     const { email, secret } = req.query
     try {
         const user = await userModel.findOne({ email })
@@ -221,5 +221,42 @@ export const passwordReset = async (req, res) => {
     res.status(200).json({ success: true, message: "Password changed successfully!" })
 }
 
+// ============
+// update profile
+export const updateProfile = async (req, res) => {
+    const { name, email, phone, password, address } = req.body
+    let hashedPassword;
 
-export { registerController, loginController, findUser, checkSecret }
+    if (password) {
+        hashedPassword = await hashPassword(password)
+    }
+
+    console.log(hashedPassword);
+
+    try {
+        const updateFields = {
+            name,
+            email,
+            phone,
+            address,
+        };
+
+        if (hashedPassword) {
+            updateFields.password = hashedPassword
+        }
+        const updated = await userModel.findByIdAndUpdate(req.user._id, updateFields, { new: true })
+        console.log(updated);
+        res.json({
+            success: true,
+            message: "Updated successfully!",
+            updated
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong!",
+            error
+        })
+    }
+}

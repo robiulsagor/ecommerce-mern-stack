@@ -1,5 +1,5 @@
 import express from "express"
-import { checkSecret, findUser, loginController, passwordReset, registerController } from "../controllers/authController.js"
+import { checkSecret, findUser, loginController, passwordReset, registerController, updateProfile } from "../controllers/authController.js"
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js"
 
 // router objects
@@ -41,5 +41,7 @@ router.get("/admin", requireSignIn, isAdmin, (req, res) => {
     return res.json("Yes, you are admin!")
 })
 
+// user profile upadate
+router.put("/update-profile", requireSignIn, updateProfile)
 
 export default router
