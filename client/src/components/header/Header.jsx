@@ -2,13 +2,16 @@ import { Link, NavLink } from "react-router-dom"
 import { SiShopee } from "react-icons/si";
 import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux"
-import { logout } from "../../redux/authSlice";
+import { logout, useAuth } from "../../redux/authSlice";
 import SearchForm from "../form/SearchForm";
 import { useCategory } from "../../hooks/useCategory";
+import { useCart } from "../../redux/cartSlice";
 
 const Header = () => {
     const dispatch = useDispatch()
-    const auth = useSelector(state => state.auth)
+    const auth = useAuth()
+    const { cart } = useCart()
+    const totalQty = cart.reduce((total, item) => total + item.quantity, 0)
 
     const categories = useCategory()
 
@@ -78,7 +81,7 @@ const Header = () => {
                             }
 
                             <li className="nav-item">
-                                <NavLink to='/cart' className="nav-link cart-link ">Cart <span>20</span></NavLink>
+                                <NavLink to='/cart' className="nav-link cart-link ">Cart <span>{totalQty} </span></NavLink>
                             </li>
 
                         </ul>
