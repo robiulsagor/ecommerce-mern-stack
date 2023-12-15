@@ -4,14 +4,14 @@ import { useAuth } from '../redux/authSlice'
 import { clearCart, decreaseQuantity, increaseQuantity, removeItem, useCart } from '../redux/cartSlice'
 import { useDispatch } from 'react-redux'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 
 const Cart = () => {
     const auth = useAuth()
     const { cart } = useCart()
-    const [total, setTotal] = useState()
-    console.log(cart);
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const getTotal = cart?.reduce((total, item) => {
         total += item.quantity * item.price
@@ -20,8 +20,6 @@ const Cart = () => {
         style: "currency",
         currency: "USD"
     })
-
-    console.log('Subtotal:', getTotal);
 
     return (
         <Layout title={"Cart- Ecommerce App"}>
@@ -36,14 +34,13 @@ const Cart = () => {
 
                     {cart?.length >= 1 && (
                         <>
-
-                            <div className="col-7">
+                            <div className="col-md-7 mb-5   ">
                                 {cart?.map((c, i) => (
                                     <div className="row border flex-row mb-2 py-4" key={i}>
-                                        <div className="col-4">
-                                            <img src={`${c.photoUrl}`} alt="img" style={{ width: '180px' }} />
+                                        <div className="col-sm-4 col-md-4">
+                                            <img src={`${c.photoUrl}`} alt="product img" style={{ width: '180px' }} />
                                         </div>
-                                        <div className="col-6 " >
+                                        <div className="col-sm-8 col-md-6 " >
                                             <p> {c.name} </p>
                                             <p> {c.description} </p>
                                             <p> ${c.price} </p>
@@ -73,6 +70,16 @@ const Cart = () => {
                                 <h2>Cart Summary</h2>
                                 <hr />
                                 <h4>Total: {getTotal} </h4>
+                                {auth?.token ? (<>
+
+                                    <h4>Current Address</h4>
+                                    <h5>{auth?.user?.address} </h5>
+                                    <button className="btn btn-warning mt-2" onClick={() => navigate("/user/dashboard")}>Update Address</button>
+                                </>) : (<>
+                                    <button className="btn btn-warning mt-2" onClick={() => { navigate("/login", { state: "/cart" }) }}>Login to Checkout</button>
+                                </>)
+
+                                }
                             </div>
                         </>
                     )}
